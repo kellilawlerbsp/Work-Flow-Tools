@@ -3,23 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Driftwood Therapeutic Supports — Tools</title>
+<title>Work Flow Tools</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:      #0c0f18;
-  --surface: #141720;
-  --card:    #1a1e2e;
-  --border:  #252a3d;
-  --teal:    #2dd4bf;
-  --blue:    #60b4ff;
-  --purple:  #b57bee;
-  --amber:   #ffb347;
-  --green:   #4ade80;
-  --text:    #f0f2ff;
-  --muted:   #8b8fa8;
+  --bg:      #F7F4EF;
+  --surface: #FFFFFF;
+  --card:    #FFFFFF;
+  --border:  #E2DAD0;
+  --border2: #D4C9BB;
+  --teal:    #2A8C78;
+  --teal-l:  #E8F5F1;
+  --blue:    #3A7DC9;
+  --blue-l:  #EAF2FB;
+  --amber:   #C07A1A;
+  --amber-l: #FDF3E3;
+  --green:   #3A8A52;
+  --green-l: #E8F5EC;
+  --text:    #2A2420;
+  --muted:   #7A6E65;
+  --soft:    #9E948A;
 }
 
 body {
@@ -30,51 +35,45 @@ body {
   overflow-x: hidden;
 }
 
-/* BACKGROUND GLOW */
 body::before {
   content: '';
-  position: fixed;
-  top: -200px; left: 50%;
-  transform: translateX(-50%);
-  width: 800px; height: 600px;
-  background: radial-gradient(ellipse, #2dd4bf0d 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
+  position: fixed; top: 0; left: 0; right: 0; height: 320px;
+  background: linear-gradient(180deg, #EDE8E0 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
 }
 
-.wrap { max-width: 860px; margin: 0 auto; padding: 60px 24px 80px; position: relative; z-index: 1; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 56px 24px 80px; position: relative; z-index: 1; }
 
 /* HEADER */
-.header { text-align: center; margin-bottom: 64px; }
+.header { text-align: center; margin-bottom: 56px; }
 .eyebrow {
   font-size: 11px; font-weight: 700; letter-spacing: 4px;
   text-transform: uppercase; color: var(--teal);
-  margin-bottom: 16px; display: block;
+  margin-bottom: 14px; display: block;
 }
 .logo {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(36px, 6vw, 56px);
+  font-size: clamp(38px, 6vw, 58px);
   font-weight: 600; line-height: 1.1;
-  color: var(--text); margin-bottom: 8px;
+  color: var(--text); margin-bottom: 10px;
 }
 .logo em { color: var(--teal); font-style: italic; }
 .tagline {
   font-size: 15px; color: var(--muted); font-weight: 300;
-  max-width: 400px; margin: 0 auto; line-height: 1.6;
+  max-width: 380px; margin: 0 auto; line-height: 1.7;
 }
 
 /* DIVIDER */
 .divider {
   display: flex; align-items: center; gap: 16px;
-  margin: 0 auto 48px; max-width: 300px;
+  margin: 0 auto 48px; max-width: 260px;
 }
-.divider-line { flex: 1; height: 1px; background: var(--border); }
-.divider-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+.divider-line { flex: 1; height: 1px; background: var(--border2); }
+.divider-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
 
 /* TOOL GRID */
-.tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
-
-@media (max-width: 580px) { .tools { grid-template-columns: 1fr; } }
+.tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 36px; }
+@media (max-width: 560px) { .tools { grid-template-columns: 1fr; } }
 
 .tool-card {
   background: var(--card);
@@ -84,89 +83,83 @@ body::before {
   text-decoration: none;
   color: var(--text);
   display: flex; flex-direction: column;
-  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   position: relative; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 .tool-card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; height: 3px;
   border-radius: 18px 18px 0 0;
-  transition: opacity 0.2s;
 }
 .tool-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.10);
 }
+.card-teal::before  { background: linear-gradient(90deg, #2A8C78, #3A7DC9); }
+.card-blue::before  { background: linear-gradient(90deg, #3A7DC9, #6B54C9); }
+.card-amber::before { background: linear-gradient(90deg, #C07A1A, #C05A3A); }
+.card-green::before { background: linear-gradient(90deg, #3A8A52, #2A8C78); }
 
-.card-teal::before  { background: linear-gradient(90deg, var(--teal), var(--blue)); }
-.card-purple::before{ background: linear-gradient(90deg, var(--purple), var(--blue)); }
-.card-amber::before { background: linear-gradient(90deg, var(--amber), #ff6b6b); }
-.card-green::before { background: linear-gradient(90deg, var(--green), var(--teal)); }
+.card-teal:hover  { border-color: #2A8C78; box-shadow: 0 12px 32px rgba(42,140,120,0.10); }
+.card-blue:hover  { border-color: #3A7DC9; box-shadow: 0 12px 32px rgba(58,125,201,0.10); }
+.card-amber:hover { border-color: #C07A1A; box-shadow: 0 12px 32px rgba(192,122,26,0.10); }
+.card-green:hover { border-color: #3A8A52; box-shadow: 0 12px 32px rgba(58,138,82,0.10); }
 
-.card-teal:hover  { border-color: var(--teal);   box-shadow: 0 16px 40px rgba(45,212,191,0.1); }
-.card-purple:hover{ border-color: var(--purple); box-shadow: 0 16px 40px rgba(181,123,238,0.1); }
-.card-amber:hover { border-color: var(--amber);  box-shadow: 0 16px 40px rgba(255,179,71,0.1); }
-.card-green:hover { border-color: var(--green);  box-shadow: 0 16px 40px rgba(74,222,128,0.1); }
-
-.card-icon { font-size: 32px; margin-bottom: 16px; }
+.card-icon { font-size: 30px; margin-bottom: 14px; }
 .card-label {
   font-size: 10px; font-weight: 700; letter-spacing: 2px;
   text-transform: uppercase; margin-bottom: 6px;
 }
-.card-teal   .card-label { color: var(--teal); }
-.card-purple .card-label { color: var(--purple); }
-.card-amber  .card-label { color: var(--amber); }
-.card-green  .card-label { color: var(--green); }
+.card-teal  .card-label { color: var(--teal); }
+.card-blue  .card-label { color: var(--blue); }
+.card-amber .card-label { color: var(--amber); }
+.card-green .card-label { color: var(--green); }
 
-.card-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; line-height: 1.2; }
-.card-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; flex: 1; margin-bottom: 20px; }
+.card-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; line-height: 1.2; color: var(--text); }
+.card-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; flex: 1; margin-bottom: 20px; }
+
 .card-cta {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 13px; font-weight: 700;
   padding: 8px 16px; border-radius: 8px;
-  align-self: flex-start;
-  transition: opacity 0.15s;
+  align-self: flex-start; transition: opacity 0.15s;
 }
-.card-cta:hover { opacity: 0.85; }
-.card-teal   .card-cta { background: rgba(45,212,191,0.15);  color: var(--teal); }
-.card-purple .card-cta { background: rgba(181,123,238,0.15); color: var(--purple); }
-.card-amber  .card-cta { background: rgba(255,179,71,0.15);  color: var(--amber); }
-.card-green  .card-cta { background: rgba(74,222,128,0.15);  color: var(--green); }
+.card-teal  .card-cta { background: var(--teal-l);  color: var(--teal); }
+.card-blue  .card-cta { background: var(--blue-l);  color: var(--blue); }
+.card-amber .card-cta { background: var(--amber-l); color: var(--amber); }
+.card-green .card-cta { background: var(--green-l); color: var(--green); }
+.card-cta:hover { opacity: 0.8; }
 
 /* WORKFLOW STRIP */
 .workflow {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 16px; padding: 24px 28px; margin-bottom: 40px;
+  border-radius: 16px; padding: 24px 28px; margin-bottom: 36px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 .workflow-title {
   font-size: 11px; font-weight: 700; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--muted); margin-bottom: 20px;
+  text-transform: uppercase; color: var(--soft); margin-bottom: 18px;
 }
-.workflow-steps {
-  display: flex; align-items: center; gap: 0;
-  flex-wrap: wrap; gap: 8px;
-}
+.workflow-steps { display: flex; gap: 8px; flex-wrap: wrap; }
 .step {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 10px; padding: 10px 14px; flex: 1; min-width: 140px;
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px; flex: 1; min-width: 140px;
 }
 .step-num {
   width: 24px; height: 24px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 800; flex-shrink: 0;
+  font-size: 11px; font-weight: 800; flex-shrink: 0; margin-top: 1px;
 }
-.step-text { font-size: 12px; line-height: 1.4; }
-.step-text strong { display: block; font-weight: 700; font-size: 12px; }
-.step-text span { color: var(--muted); font-size: 11px; }
-.arrow { color: var(--border); font-size: 18px; flex-shrink: 0; display: none; }
-@media (min-width: 600px) { .arrow { display: block; } }
+.step-text strong { display: block; font-weight: 700; font-size: 12px; color: var(--text); }
+.step-text span   { color: var(--muted); font-size: 11px; line-height: 1.4; display: block; margin-top: 2px; }
 
 /* FOOTER */
 footer {
-  text-align: center; font-size: 12px; color: var(--muted);
-  padding-top: 40px; border-top: 1px solid var(--border);
-  line-height: 1.8;
+  text-align: center; font-size: 12px; color: var(--soft);
+  padding-top: 36px; border-top: 1px solid var(--border);
+  line-height: 1.9;
 }
 footer a { color: var(--teal); text-decoration: none; }
 </style>
@@ -174,11 +167,10 @@ footer a { color: var(--teal); text-decoration: none; }
 <body>
 <div class="wrap">
 
-  <!-- HEADER -->
   <header class="header">
     <span class="eyebrow">Practice Tools</span>
-    <h1 class="logo">Driftwood<br><em>Therapeutic Supports</em></h1>
-    <p class="tagline">Your practice tools — all in one place. Bookmark this page.</p>
+    <h1 class="logo">Work Flow <em>Tools</em></h1>
+    <p class="tagline">Everything in one place. Bookmark this page and start here each day.</p>
   </header>
 
   <div class="divider">
@@ -187,22 +179,21 @@ footer a { color: var(--teal); text-decoration: none; }
     <div class="divider-line"></div>
   </div>
 
-  <!-- TOOLS -->
   <div class="tools">
 
     <a href="command-centre.html" class="tool-card card-teal">
       <div class="card-icon">🎯</div>
       <div class="card-label">Daily workflow</div>
       <div class="card-title">Command Centre</div>
-      <div class="card-desc">Your daily briefing, client task list, deadlines, and caseload snapshot. Starts here every day.</div>
+      <div class="card-desc">Your daily briefing, client task list, deadlines, and caseload snapshot. Start here every day.</div>
       <span class="card-cta">Open dashboard →</span>
     </a>
 
-    <a href="BSP_Engagement_Plan_Calculator.html" class="tool-card card-purple">
+    <a href="BSP_Engagement_Plan_Calculator.html" class="tool-card card-blue">
       <div class="card-icon">📋</div>
       <div class="card-label">Client planning</div>
       <div class="card-title">Engagement Plan Calculator</div>
-      <div class="card-desc">Set up a new client engagement — complexity tier, stage hours, funding periods. Exports directly to the Command Centre.</div>
+      <div class="card-desc">Complexity tier, stage hours, funding periods. Exports directly to the Command Centre.</div>
       <span class="card-cta">Open calculator →</span>
     </a>
 
@@ -210,7 +201,7 @@ footer a { color: var(--teal); text-decoration: none; }
       <div class="card-icon">💰</div>
       <div class="card-label">Financials</div>
       <div class="card-title">Financial Tracker</div>
-      <div class="card-desc">Track your fortnightly income pipeline — from Splose hours through to reconciliation in Xero. Never lose track of a PO.</div>
+      <div class="card-desc">Weekly hours per client, fortnightly PO pipeline, through to Xero reconciliation.</div>
       <span class="card-cta">Open tracker →</span>
     </a>
 
@@ -218,51 +209,49 @@ footer a { color: var(--teal); text-decoration: none; }
       <div class="card-icon">📄</div>
       <div class="card-label">Reference</div>
       <div class="card-title">Xero Setup Guide</div>
-      <div class="card-desc">Step-by-step Xero setup for your sole trader subcontracting setup — chart of accounts, income recording, and cash flow tracking.</div>
+      <div class="card-desc">Step-by-step Xero setup for sole trader subcontracting — chart of accounts and cash flow.</div>
       <span class="card-cta">Download guide →</span>
     </a>
 
   </div>
 
-  <!-- WORKFLOW -->
   <div class="workflow">
     <div class="workflow-title">Your daily workflow</div>
     <div class="workflow-steps">
       <div class="step">
-        <div class="step-num" style="background:rgba(45,212,191,0.15);color:#2dd4bf;">1</div>
+        <div class="step-num" style="background:var(--teal-l);color:var(--teal);">1</div>
         <div class="step-text">
           <strong>New client</strong>
           <span>Engagement Plan Calculator → export .bsp</span>
         </div>
       </div>
       <div class="step">
-        <div class="step-num" style="background:rgba(181,123,238,0.15);color:#b57bee;">2</div>
+        <div class="step-num" style="background:var(--blue-l);color:var(--blue);">2</div>
         <div class="step-text">
           <strong>Import to dashboard</strong>
           <span>Command Centre → tasks auto-created</span>
         </div>
       </div>
       <div class="step">
-        <div class="step-num" style="background:rgba(255,179,71,0.15);color:#ffb347;">3</div>
+        <div class="step-num" style="background:var(--amber-l);color:var(--amber);">3</div>
         <div class="step-text">
-          <strong>Log hours in Splose</strong>
-          <span>Fortnightly → check PO matches</span>
+          <strong>Log hours weekly</strong>
+          <span>Financial Tracker → Friday by lunch</span>
         </div>
       </div>
       <div class="step">
-        <div class="step-num" style="background:rgba(74,222,128,0.15);color:#4ade80;">4</div>
+        <div class="step-num" style="background:var(--green-l);color:var(--green);">4</div>
         <div class="step-text">
-          <strong>Record in Financial Tracker</strong>
-          <span>PO → paid → reconcile in Xero</span>
+          <strong>Reconcile fortnight</strong>
+          <span>PO received → paid → into Xero</span>
         </div>
       </div>
     </div>
   </div>
 
   <footer>
-    Driftwood Therapeutic Supports &nbsp;·&nbsp; Kelli — ABSP &nbsp;·&nbsp; NDIS Reg. P0004594<br>
-    Tools run locally in your browser. No data is sent externally.<br>
-    <span style="font-size:11px;color:#4a4f6a;">Built May 2026</span>
+    Tools run locally in your browser — no data is sent externally.<br>
+    <span style="font-size:11px;color:#B8AFA8;">Built May 2026</span>
   </footer>
 
 </div>
