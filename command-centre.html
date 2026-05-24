@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelli's Command Centre</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: #0f1117;
+  color: #f0f2ff;
+  min-height: 100vh;
+  padding: 24px 20px 60px;
+}
+.wrap { max-width: 720px; margin: 0 auto; }
+
+/* HEADER */
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.header-title { font-size: 11px; color: #b57bee; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; }
+.header-h1 { font-size: 26px; font-weight: 800; font-family: Georgia, serif; line-height: 1.1; }
+.btn-add {
+  background: linear-gradient(135deg, #b57bee, #60b4ff);
+  border: none; border-radius: 12px; color: #fff;
+  padding: 10px 18px; font-weight: 700; font-size: 14px;
+  cursor: pointer; font-family: inherit;
+}
+
+/* BRIEFING */
+.briefing {
+  background: linear-gradient(135deg, #1e1040 0%, #1a1d27 60%, #0d2233 100%);
+  border-radius: 18px; padding: 28px 28px 24px;
+  margin-bottom: 16px; border: 1px solid #2e3250;
+  position: relative; overflow: hidden;
+}
+.briefing::before {
+  content: ''; position: absolute; top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, #b57bee33 0%, transparent 70%);
+  border-radius: 50%;
+}
+.briefing-date { font-size: 12px; color: #8b8fa8; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.briefing-greeting { font-size: 20px; font-weight: 800; font-family: Georgia, serif; margin-bottom: 18px; }
+.briefing-stats { display: flex; gap: 12px; flex-wrap: wrap; }
+.stat-pill {
+  border-radius: 12px; padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.stat-pill .stat-num { font-size: 22px; font-weight: 800; line-height: 1; }
+.stat-pill .stat-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #8b8fa8; }
+.focus-box {
+  margin-top: 16px; background: rgba(255,255,255,0.05);
+  border-radius: 10px; padding: 12px 16px;
+}
+.focus-label { font-size: 12px; color: #8b8fa8; margin-bottom: 3px; }
+.focus-name { font-weight: 700; font-size: 15px; }
+
+/* IMPORT BANNER */
+.import-banner {
+  background: #1a1d27; border: 1px dashed #2e3250;
+  border-radius: 12px; padding: 12px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 12px; cursor: pointer;
+  transition: all 0.3s;
+}
+.import-banner:hover { border-color: #2dd4bf; }
+.import-title { font-size: 13px; font-weight: 700; }
+.import-sub { font-size: 11px; color: #8b8fa8; margin-top: 2px; }
+.import-btn-badge {
+  background: rgba(45,212,191,0.15); border: 1px solid rgba(45,212,191,0.3);
+  color: #2dd4bf; border-radius: 8px; padding: 6px 14px;
+  font-size: 12px; font-weight: 700; white-space: nowrap;
+}
+
+/* CAPACITY BAR */
+.capacity {
+  background: #1a1d27; border: 1px solid #2e3250;
+  border-radius: 12px; padding: 14px 18px; margin-bottom: 16px;
+}
+.capacity-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.capacity-label { font-size: 11px; color: #8b8fa8; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+.capacity-hrs { font-size: 12px; color: #b57bee; font-weight: 700; }
+.bar { display: flex; border-radius: 6px; overflow: hidden; height: 10px; margin-bottom: 10px; background: #2e3250; }
+.bar-seg { transition: flex 0.4s; height: 10px; }
+.capacity-legend { display: flex; gap: 14px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #8b8fa8; }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+/* SEARCH & FILTERS */
+.search-input {
+  width: 100%; background: #1a1d27; border: 1px solid #2e3250;
+  border-radius: 12px; color: #f0f2ff; padding: 11px 16px;
+  font-size: 14px; margin-bottom: 12px; font-family: inherit;
+  outline: none;
+}
+.search-input:focus { border-color: #60b4ff; }
+.filters { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.filter-btn {
+  background: transparent; border: 1px solid #2e3250;
+  color: #8b8fa8; border-radius: 20px; padding: 6px 14px;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  font-family: inherit; transition: all 0.15s;
+}
+.filter-btn.active { background: rgba(96,180,255,0.15); border-color: #60b4ff; color: #60b4ff; }
+.filter-btn[data-status="overdue"].active { background: rgba(255,77,109,0.15); border-color: #ff4d6d; color: #ff4d6d; }
+.filter-btn[data-status="urgent"].active { background: rgba(255,179,71,0.15); border-color: #ffb347; color: #ffb347; }
+.filter-btn[data-status="steady"].active { background: rgba(74,222,128,0.15); border-color: #4ade80; color: #4ade80; }
+
+/* TASK CARDS */
+.task-card {
+  background: #21253a; border-radius: 14px; padding: 16px 20px;
+  border: 1px solid #2e3250; margin-bottom: 10px;
+  cursor: pointer; transition: border-color 0.2s;
+  border-left-width: 4px;
+}
+.task-card-top { display: flex; align-items: center; gap: 12px; }
+.task-icon { font-size: 22px; flex-shrink: 0; }
+.task-name { font-weight: 700; font-size: 15px; }
+.task-type { font-size: 12px; color: #8b8fa8; margin-top: 1px; }
+.task-right { margin-left: auto; text-align: right; }
+.badge {
+  display: inline-block; border-radius: 20px; padding: 2px 10px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+}
+.due-label { font-size: 12px; font-weight: 600; margin-top: 4px; }
+
+/* EXPANDED CARD */
+.task-expand { display: none; margin-top: 14px; border-top: 1px solid #2e3250; padding-top: 14px; }
+.task-expand.open { display: block; }
+.expand-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-label { font-size: 11px; color: #8b8fa8; text-transform: uppercase; letter-spacing: 0.5px; }
+.field-select, .field-input {
+  background: #1a1d27; border: 1px solid #2e3250; border-radius: 8px;
+  color: #f0f2ff; padding: 6px 10px; font-size: 13px;
+  font-family: inherit; outline: none;
+}
+.field-select:focus, .field-input:focus { border-color: #60b4ff; }
+.invoice-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #8b8fa8; margin-bottom: 12px; cursor: pointer; }
+.invoice-row input { accent-color: #2dd4bf; width: 16px; height: 16px; cursor: pointer; }
+.notes-display {
+  background: #1a1d27; border: 1px solid #2e3250; border-radius: 8px;
+  padding: 8px 12px; font-size: 13px; cursor: text;
+  color: #8b8fa8; min-height: 36px;
+}
+.notes-input {
+  width: 100%; background: #1a1d27; border: 1px solid #60b4ff;
+  border-radius: 8px; color: #f0f2ff; padding: 8px 12px;
+  font-size: 13px; font-family: inherit; outline: none;
+}
+.expand-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.btn-save { background: #60b4ff; border: none; border-radius: 8px; color: #000; padding: 6px 16px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.btn-delete { background: rgba(255,77,109,0.15); border: 1px solid rgba(255,77,109,0.3); border-radius: 8px; color: #ff4d6d; padding: 6px 14px; cursor: pointer; font-family: inherit; font-size: 12px; }
+
+/* MODAL */
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 100; display: none; align-items: center; justify-content: center;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: #1a1d27; border-radius: 18px; padding: 28px;
+  width: 100%; max-width: 420px; border: 1px solid #2e3250;
+  margin: 20px;
+}
+.modal-title { font-size: 18px; font-weight: 800; margin-bottom: 20px; }
+.modal-label { font-size: 12px; color: #8b8fa8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.modal-input, .modal-select {
+  width: 100%; background: #0f1117; border: 1px solid #2e3250;
+  border-radius: 8px; color: #f0f2ff; padding: 8px 12px;
+  font-size: 14px; margin-bottom: 14px; font-family: inherit; outline: none;
+}
+.modal-input:focus, .modal-select:focus { border-color: #60b4ff; }
+.modal-footer { display: flex; gap: 10px; margin-top: 6px; }
+.btn-cancel { flex: 1; background: transparent; border: 1px solid #2e3250; color: #8b8fa8; border-radius: 10px; padding: 10px; cursor: pointer; font-family: inherit; font-size: 14px; }
+.btn-confirm { flex: 2; background: #b57bee; border: none; color: #fff; border-radius: 10px; padding: 10px; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 700; }
+
+/* SAVE BAR */
+.save-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #1a1d27; border-top: 1px solid #2e3250;
+  padding: 10px 20px; display: flex; justify-content: space-between;
+  align-items: center; gap: 12px; z-index: 50;
+}
+.save-bar-text { font-size: 12px; color: #8b8fa8; }
+.btn-save-data { background: #1a1d27; border: 1px solid #2e3250; color: #8b8fa8; border-radius: 8px; padding: 7px 14px; cursor: pointer; font-family: inherit; font-size: 12px; }
+.btn-save-data:hover { border-color: #2dd4bf; color: #2dd4bf; }
+.btn-load-data { background: #1a1d27; border: 1px solid #2e3250; color: #8b8fa8; border-radius: 8px; padding: 7px 14px; cursor: pointer; font-family: inherit; font-size: 12px; }
+.btn-load-data:hover { border-color: #60b4ff; color: #60b4ff; }
+.autosave-indicator { font-size: 11px; color: #4ade80; }
+
+.empty { text-align: center; color: #8b8fa8; padding: 40px; }
+.footer-tip { margin-top: 20px; text-align: center; font-size: 12px; color: #8b8fa8; padding: 16px; background: #1a1d27; border-radius: 12px; border: 1px solid #2e3250; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="header-title">Kelli's</div>
+      <div class="header-h1">Command Centre</div>
+    </div>
+    <button class="btn-add" onclick="openModal()">＋ Add Task</button>
+  </div>
+
+  <!-- BRIEFING -->
+  <div class="briefing">
+    <div class="briefing-date" id="briefing-date"></div>
+    <div class="briefing-greeting" id="briefing-greeting"></div>
+    <div class="briefing-stats" id="briefing-stats"></div>
+    <div class="focus-box" id="focus-box" style="display:none;">
+      <div class="focus-label">🎯 SUGGESTED FOCUS RIGHT NOW</div>
+      <div class="focus-name" id="focus-name"></div>
+    </div>
+  </div>
+
+  <!-- IMPORT -->
+  <div class="import-banner" onclick="document.getElementById('bsp-file').click()">
+    <div>
+      <div class="import-title" id="import-title">⬡ Import from Engagement Plan Calculator</div>
+      <div class="import-sub" id="import-sub">Select a .bsp file exported from the calculator — tasks created automatically</div>
+    </div>
+    <div class="import-btn-badge">Browse file</div>
+    <input type="file" id="bsp-file" accept=".bsp,.json" style="display:none" onchange="handleImport(event)">
+  </div>
+
+  <!-- CAPACITY -->
+  <div class="capacity">
+    <div class="capacity-header">
+      <div class="capacity-label">Caseload Snapshot</div>
+      <div class="capacity-hrs" id="capacity-hrs"></div>
+    </div>
+    <div class="bar" id="capacity-bar"></div>
+    <div class="capacity-legend" id="capacity-legend"></div>
+  </div>
+
+  <!-- SEARCH -->
+  <input class="search-input" type="text" placeholder="🔍  Search client or task type..." oninput="renderTasks()" id="search">
+
+  <!-- FILTERS -->
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-status="all" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" data-status="overdue" onclick="setFilter('overdue',this)">🔴 Overdue</button>
+    <button class="filter-btn" data-status="urgent" onclick="setFilter('urgent',this)">🟡 Due Soon</button>
+    <button class="filter-btn" data-status="upcoming" onclick="setFilter('upcoming',this)">🔵 Upcoming</button>
+    <button class="filter-btn" data-status="steady" onclick="setFilter('steady',this)">🟢 Steady</button>
+  </div>
+
+  <!-- TASK LIST -->
+  <div id="task-list"></div>
+
+  <div class="footer-tip">💡 <strong>Tap any card</strong> to expand and update status, dates, or notes. Your data saves automatically.</div>
+</div>
+
+<!-- SAVE BAR -->
+<div class="save-bar">
+  <div class="save-bar-text">
+    Data saves to this browser automatically.
+    <span class="autosave-indicator" id="autosave-indicator"></span>
+  </div>
+  <div style="display:flex;gap:8px;">
+    <button class="btn-load-data" onclick="document.getElementById('load-file').click()">⬆ Load backup</button>
+    <input type="file" id="load-file" accept=".json" style="display:none" onchange="loadBackup(event)">
+    <button class="btn-save-data" onclick="saveBackup()">⬇ Save backup</button>
+  </div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal-bg" id="modal" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title">➕ Add Client / Task</div>
+    <div class="modal-label">Client Name</div>
+    <input class="modal-input" id="m-name" placeholder="e.g. Jordan M.">
+    <div class="modal-label">Task Type</div>
+    <select class="modal-select" id="m-type">
+      <option>BSP Report</option>
+      <option>Session Note</option>
+      <option>Review Meeting</option>
+      <option>Invoice Due</option>
+    </select>
+    <div class="modal-label">Due Date</div>
+    <input class="modal-input" type="date" id="m-due">
+    <div class="modal-label">Priority</div>
+    <select class="modal-select" id="m-status">
+      <option value="overdue">Overdue</option>
+      <option value="urgent">Due Soon</option>
+      <option value="upcoming" selected>Upcoming</option>
+      <option value="steady">Steady</option>
+    </select>
+    <div class="modal-label">Notes (optional)</div>
+    <input class="modal-input" id="m-notes" placeholder="e.g. Awaiting school data">
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="document.getElementById('modal').classList.remove('open')">Cancel</button>
+      <button class="btn-confirm" onclick="addTask()">Add Task</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var STATUS = {
+  overdue:  { label:'Overdue',  color:'#ff4d6d', emoji:'🔴', priority:0 },
+  urgent:   { label:'Due Soon', color:'#ffb347', emoji:'🟡', priority:1 },
+  upcoming: { label:'Upcoming', color:'#60b4ff', emoji:'🔵', priority:2 },
+  steady:   { label:'Steady',   color:'#4ade80', emoji:'🟢', priority:3 },
+};
+var TYPE_ICONS = { 'BSP Report':'📋','Session Note':'📝','Review Meeting':'🤝','Invoice Due':'💰' };
+var GREETINGS = [
+  "Let's take this one thing at a time, Kelli.",
+  "You've got this. One task at a time.",
+  "No need to do it all today. Let's find your focus.",
+  "Your system has your back. Here's what matters now.",
+];
+
+var tasks = [];
+var currentFilter = 'all';
+var expandedId = null;
+
+// ── STORAGE ──────────────────────────────────────────
+function saveToStorage() {
+  try {
+    localStorage.setItem('kelli_tasks', JSON.stringify(tasks));
+    var ind = document.getElementById('autosave-indicator');
+    ind.textContent = '✓ Saved';
+    setTimeout(function() { ind.textContent = ''; }, 2000);
+  } catch(e) {}
+}
+
+function loadFromStorage() {
+  try {
+    var raw = localStorage.getItem('kelli_tasks');
+    if (raw) { tasks = JSON.parse(raw); }
+  } catch(e) {}
+  if (!tasks || tasks.length === 0) { tasks = getDefaultTasks(); }
+}
+
+function getDefaultTasks() {
+  return [
+    { id:1, name:'Marcus T.', type:'BSP Report', dueDate:'2026-05-26', status:'overdue', invoiced:false, notes:'Draft 2 in progress', estimatedHours:0 },
+    { id:2, name:'Priya S.', type:'Session Note', dueDate:'2026-05-28', status:'urgent', invoiced:false, notes:'Functional assessment needed', estimatedHours:0 },
+    { id:3, name:'Liam O.', type:'BSP Report', dueDate:'2026-06-02', status:'upcoming', invoiced:true, notes:'', estimatedHours:0 },
+    { id:4, name:'Danielle W.', type:'Review Meeting', dueDate:'2026-05-30', status:'urgent', invoiced:false, notes:'Prepare agenda', estimatedHours:0 },
+    { id:5, name:'Noah B.', type:'Invoice Due', dueDate:'2026-06-05', status:'upcoming', invoiced:false, notes:'$1,240 outstanding', estimatedHours:0 },
+  ];
+}
+
+function saveBackup() {
+  var blob = new Blob([JSON.stringify({ version:'1.0', tasks:tasks }, null, 2)], { type:'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'command_centre_backup_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function loadBackup(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var data = JSON.parse(ev.target.result);
+      if (data.tasks) { tasks = data.tasks; saveToStorage(); renderAll(); }
+    } catch(err) { alert('Could not read backup file.'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ── DATES ─────────────────────────────────────────────
+function getDaysUntil(dateStr) {
+  var today = new Date(); today.setHours(0,0,0,0);
+  var due = new Date(dateStr);
+  return Math.round((due - today) / 86400000);
+}
+function getDueLabel(days) {
+  if (days < 0) return Math.abs(days) + 'd overdue';
+  if (days === 0) return 'Due today';
+  if (days === 1) return 'Due tomorrow';
+  return 'Due in ' + days + 'd';
+}
+function getTodayStr() {
+  return new Date().toLocaleDateString('en-AU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+}
+
+// ── BRIEFING ──────────────────────────────────────────
+function renderBriefing() {
+  document.getElementById('briefing-date').textContent = getTodayStr();
+  document.getElementById('briefing-greeting').textContent = GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
+
+  var overdue  = tasks.filter(function(t) { return t.status === 'overdue'; }).length;
+  var urgent   = tasks.filter(function(t) { return t.status === 'urgent'; }).length;
+  var uninvoiced = tasks.filter(function(t) { return !t.invoiced; }).length;
+
+  var stats = [
+    { label:'Overdue', value:overdue, color:'#ff4d6d', icon:'🔴' },
+    { label:'Due soon', value:urgent, color:'#ffb347', icon:'🟡' },
+    { label:'Not invoiced', value:uninvoiced, color:'#b57bee', icon:'💜' },
+  ];
+  var html = '';
+  stats.forEach(function(s) {
+    html += '<div class="stat-pill" style="background:' + s.color + '15;border:1px solid ' + s.color + '33;">';
+    html += '<span style="font-size:18px;">' + s.icon + '</span>';
+    html += '<div><div class="stat-num" style="color:' + s.color + ';">' + s.value + '</div><div class="stat-lbl">' + s.label + '</div></div></div>';
+  });
+  document.getElementById('briefing-stats').innerHTML = html;
+
+  var focus = tasks
+    .filter(function(t) { return t.status === 'overdue' || t.status === 'urgent'; })
+    .sort(function(a,b) { return STATUS[a.status].priority - STATUS[b.status].priority; })[0];
+
+  var focusBox = document.getElementById('focus-box');
+  if (focus) {
+    focusBox.style.display = 'block';
+    focusBox.style.borderLeft = '3px solid ' + STATUS[focus.status].color;
+    document.getElementById('focus-name').innerHTML =
+      '<span>' + focus.name + ' — ' + focus.type + '</span>' +
+      '<span style="color:' + STATUS[focus.status].color + ';font-weight:400;font-size:13px;margin-left:10px;">' +
+      getDueLabel(getDaysUntil(focus.dueDate)) + '</span>';
+  } else {
+    focusBox.style.display = 'none';
+  }
+}
+
+// ── CAPACITY ──────────────────────────────────────────
+function renderCapacity() {
+  var counts = { overdue:0, urgent:0, upcoming:0, steady:0 };
+  tasks.forEach(function(t) { if (counts[t.status] !== undefined) counts[t.status]++; });
+  var total = tasks.length || 1;
+  var totalHrs = tasks.reduce(function(a,t) { return a + (parseFloat(t.estimatedHours)||0); }, 0);
+
+  if (totalHrs > 0) {
+    document.getElementById('capacity-hrs').textContent = '~' + totalHrs.toFixed(0) + ' hrs estimated';
+  } else {
+    document.getElementById('capacity-hrs').textContent = '';
+  }
+
+  var segs = [
+    { key:'overdue', color:'#ff4d6d', label:'Overdue' },
+    { key:'urgent',  color:'#ffb347', label:'Due soon' },
+    { key:'upcoming',color:'#60b4ff', label:'Upcoming' },
+    { key:'steady',  color:'#4ade80', label:'Steady' },
+  ].filter(function(s) { return counts[s.key] > 0; });
+
+  var barHtml = '';
+  var legendHtml = '';
+  if (segs.length === 0) {
+    barHtml = '<div class="bar-seg" style="flex:1;background:#2e3250;"></div>';
+  }
+  segs.forEach(function(s) {
+    var pct = (counts[s.key] / total * 100).toFixed(1);
+    barHtml += '<div class="bar-seg" style="flex:' + counts[s.key]/total + ';background:' + s.color + ';"></div>';
+    legendHtml += '<div class="legend-item"><div class="legend-dot" style="background:' + s.color + ';"></div>' + counts[s.key] + ' ' + s.label + '</div>';
+  });
+  document.getElementById('capacity-bar').innerHTML = barHtml;
+  document.getElementById('capacity-legend').innerHTML = legendHtml;
+}
+
+// ── TASK LIST ─────────────────────────────────────────
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderTasks();
+}
+
+function renderTasks() {
+  var search = document.getElementById('search').value.toLowerCase();
+  var filtered = tasks
+    .filter(function(t) { return currentFilter === 'all' || t.status === currentFilter; })
+    .filter(function(t) {
+      if (!search) return true;
+      return t.name.toLowerCase().indexOf(search) !== -1 || t.type.toLowerCase().indexOf(search) !== -1;
+    })
+    .sort(function(a,b) {
+      var pa = STATUS[a.status] ? STATUS[a.status].priority : 99;
+      var pb = STATUS[b.status] ? STATUS[b.status].priority : 99;
+      return pa - pb;
+    });
+
+  var container = document.getElementById('task-list');
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty">No tasks match. You\'re on top of it! 🎉</div>';
+    return;
+  }
+
+  var html = '';
+  filtered.forEach(function(t) {
+    var cfg = STATUS[t.status] || STATUS.upcoming;
+    var days = getDaysUntil(t.dueDate);
+    var isExpanded = expandedId === t.id;
+    var icon = TYPE_ICONS[t.type] || '📌';
+
+    html += '<div class="task-card" id="card-' + t.id + '" style="border-color:' + (isExpanded ? cfg.color+'99' : '#2e3250') + ';border-left-color:' + cfg.color + ';" onclick="toggleExpand(' + t.id + ',event)">';
+    html += '<div class="task-card-top">';
+    html += '<span class="task-icon">' + icon + '</span>';
+    html += '<div><div class="task-name">' + t.name + '</div><div class="task-type">' + t.type + '</div></div>';
+    html += '<div class="task-right">';
+    html += '<span class="badge" style="background:' + cfg.color + '22;color:' + cfg.color + ';border:1px solid ' + cfg.color + '55;">' + cfg.emoji + ' ' + cfg.label + '</span>';
+    html += '<div class="due-label" style="color:' + cfg.color + ';">' + getDueLabel(days) + '</div>';
+    html += '</div></div>';
+
+    // Expanded section
+    html += '<div class="task-expand' + (isExpanded ? ' open' : '') + '" onclick="event.stopPropagation()">';
+    html += '<div class="expand-row">';
+    html += '<div class="field-group"><div class="field-label">Status</div>';
+    html += '<select class="field-select" onchange="updateTask(' + t.id + ',\'status\',this.value)">';
+    Object.keys(STATUS).forEach(function(s) {
+      html += '<option value="' + s + '"' + (t.status===s?' selected':'') + '>' + STATUS[s].label + '</option>';
+    });
+    html += '</select></div>';
+
+    html += '<div class="field-group"><div class="field-label">Type</div>';
+    html += '<select class="field-select" onchange="updateTask(' + t.id + ',\'type\',this.value)">';
+    Object.keys(TYPE_ICONS).forEach(function(ty) {
+      html += '<option value="' + ty + '"' + (t.type===ty?' selected':'') + '>' + ty + '</option>';
+    });
+    html += '</select></div>';
+
+    html += '<div class="field-group"><div class="field-label">Due Date</div>';
+    html += '<input type="date" class="field-input" value="' + (t.dueDate||'') + '" onchange="updateTask(' + t.id + ',\'dueDate\',this.value)"></div>';
+    html += '</div>';
+
+    html += '<label class="invoice-row"><input type="checkbox"' + (t.invoiced?' checked':'') + ' onchange="updateTask(' + t.id + ',\'invoiced\',this.checked)">';
+    html += '<span style="color:' + (t.invoiced?'#2dd4bf':'#8b8fa8') + ';">' + (t.invoiced?'✅ Invoiced':'Invoice pending') + '</span></label>';
+
+    html += '<div class="field-label" style="margin-bottom:4px;">Notes</div>';
+    html += '<div class="notes-display" onclick="editNote(' + t.id + ')" id="notes-' + t.id + '">' + (t.notes || '<span style="color:#4a4f6a;">Click to add a note...</span>') + '</div>';
+
+    html += '<div class="expand-footer">';
+    html += '<button class="btn-delete" onclick="deleteTask(' + t.id + ')">🗑 Remove</button>';
+    html += '</div>';
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+function toggleExpand(id, e) {
+  if (e && e.target && (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON')) return;
+  expandedId = (expandedId === id) ? null : id;
+  renderTasks();
+}
+
+function editNote(id) {
+  var t = tasks.find(function(x) { return x.id === id; });
+  if (!t) return;
+  var el = document.getElementById('notes-' + id);
+  if (!el) return;
+  el.outerHTML = '<div style="display:flex;gap:8px;"><input class="notes-input" id="note-input-' + id + '" value="' + (t.notes||'').replace(/"/g,'&quot;') + '" autofocus><button class="btn-save" onclick="saveNote(' + id + ')">Save</button></div>';
+  var inp = document.getElementById('note-input-' + id);
+  if (inp) { inp.focus(); inp.onkeydown = function(e) { if (e.key==='Enter') saveNote(id); }; }
+}
+
+function saveNote(id) {
+  var inp = document.getElementById('note-input-' + id);
+  if (!inp) return;
+  updateTask(id, 'notes', inp.value);
+}
+
+function updateTask(id, field, value) {
+  tasks = tasks.map(function(t) {
+    if (t.id !== id) return t;
+    var updated = Object.assign({}, t);
+    updated[field] = value;
+    return updated;
+  });
+  saveToStorage();
+  renderAll();
+}
+
+function deleteTask(id) {
+  if (!confirm('Remove this task?')) return;
+  tasks = tasks.filter(function(t) { return t.id !== id; });
+  expandedId = null;
+  saveToStorage();
+  renderAll();
+}
+
+// ── ADD TASK ──────────────────────────────────────────
+function openModal() { document.getElementById('modal').classList.add('open'); }
+function closeModal(e) { if (e.target === document.getElementById('modal')) document.getElementById('modal').classList.remove('open'); }
+
+function addTask() {
+  var name = document.getElementById('m-name').value.trim();
+  var due  = document.getElementById('m-due').value;
+  if (!name || !due) { alert('Please enter a name and due date.'); return; }
+  tasks.push({
+    id: Date.now(),
+    name: name,
+    type: document.getElementById('m-type').value,
+    dueDate: due,
+    status: document.getElementById('m-status').value,
+    invoiced: false,
+    notes: document.getElementById('m-notes').value,
+    estimatedHours: 0,
+  });
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('m-name').value = '';
+  document.getElementById('m-notes').value = '';
+  saveToStorage();
+  renderAll();
+}
+
+// ── IMPORT ────────────────────────────────────────────
+function handleImport(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var data = JSON.parse(ev.target.result);
+      if (!data.tasks || !data.participant) throw new Error('bad');
+      var existing = {};
+      tasks.forEach(function(t) { existing[t.name + t.dueDate] = true; });
+      var added = 0;
+      data.tasks.forEach(function(t, i) {
+        if (!existing[t.name + t.dueDate]) {
+          tasks.push(Object.assign({}, t, {
+            id: Date.now() + i,
+            estimatedHours: i === 0 ? (data.totalEstimatedHours || 0) : 0,
+          }));
+          added++;
+        }
+      });
+      saveToStorage();
+      renderAll();
+      var title = document.getElementById('import-title');
+      var sub = document.getElementById('import-sub');
+      title.textContent = '✓ ' + data.participant.name + ' imported — ' + added + ' task(s) added';
+      title.style.color = '#2dd4bf';
+      sub.textContent = '';
+      setTimeout(function() {
+        title.textContent = '⬡ Import from Engagement Plan Calculator';
+        title.style.color = '';
+        sub.textContent = 'Select a .bsp file exported from the calculator — tasks created automatically';
+      }, 4000);
+    } catch(err) {
+      alert('Could not read file. Export a .bsp from the calculator first.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ── RENDER ALL ────────────────────────────────────────
+function renderAll() {
+  renderBriefing();
+  renderCapacity();
+  renderTasks();
+}
+
+// ── INIT ──────────────────────────────────────────────
+loadFromStorage();
+renderAll();
+</script>
+</body>
+</html>

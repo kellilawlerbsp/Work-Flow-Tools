@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSP Participant Engagement Plan Calculator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap');
+
+  :root {
+    --cream: #F5F0E8;
+    --sand: #E8DCC8;
+    --drift: #C4A882;
+    --shore: #8B7355;
+    --bark: #4A3728;
+    --tide: #2C4A3E;
+    --tide-light: #3D6B5A;
+    --text-primary: #2A1F14;
+    --text-secondary: #6B5744;
+    --text-muted: #9A8572;
+    --border: #D4C4AE;
+    --border-light: #E8DCC8;
+    --white: #FDFAF5;
+    --success: #2C4A3E;
+    --warn: #8B6914;
+    --danger: #7A2828;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    background: var(--cream);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* OFFLINE BANNER */
+  .offline-notice {
+    background: var(--tide);
+    color: #B8D4CA;
+    text-align: center;
+    padding: 8px 16px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+  .offline-notice strong { color: #E8F5F0; }
+
+  /* HEADER */
+  header {
+    background: var(--bark);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--shore);
+  }
+  .logo-block { display: flex; flex-direction: column; gap: 2px; }
+  .logo-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--sand);
+    letter-spacing: 0.02em;
+  }
+  .doc-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--drift);
+  }
+  .provider-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .provider-fields input { font-size: 12px; background: rgba(255,255,255,0.08); border-color: var(--shore); color: var(--sand); padding: 5px 8px; }
+  .provider-fields input::placeholder { color: var(--drift); opacity: 0.7; }
+  .provider-fields label { color: var(--drift); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  /* LAYOUT */
+  .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* SECTIONS */
+  .section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .section-title {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  /* FORM FIELDS */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: 11px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.03em; }
+
+  input[type=text], input[type=date], input[type=number], select, textarea {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 7px 10px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--shore); background: var(--white); }
+  input[type=number] { text-align: right; }
+
+  /* TIER BUTTONS */
+  .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .tier-btn {
+    padding: 12px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    background: var(--cream);
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .tier-btn:hover { border-color: var(--shore); background: var(--white); }
+  .tier-btn.active { border-width: 2px; }
+  .tier-btn.t-standard.active { border-color: #3B6D11; background: #EAF3DE; }
+  .tier-btn.t-complex.active { border-color: #185FA5; background: #E6F1FB; }
+  .tier-btn.t-high.active { border-color: #7A3B9B; background: #F3EAFE; }
+  .tier-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .tier-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-std { background: #3B6D11; }
+  .dot-cmp { background: #185FA5; }
+  .dot-hi { background: #7A3B9B; }
+  .tier-name { font-size: 13px; font-weight: 500; }
+  .tier-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+  /* STAGES TABLE */
+  .stage-row {
+    display: grid;
+    grid-template-columns: 1fr 90px;
+    gap: 8px;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .stage-row:last-of-type { border-bottom: none; }
+  .stage-name { font-size: 13px; color: var(--text-primary); }
+  .stage-hrs input { width: 80px; }
+  .stage-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0 0;
+    margin-top: 4px;
+    border-top: 2px solid var(--border);
+    font-weight: 500;
+  }
+  .stage-total-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--tide);
+  }
+
+  /* SUMMARY BAR */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .summary-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+    text-align: center;
+  }
+  .summary-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--bark);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .summary-lbl { font-size: 11px; color: var(--text-muted); letter-spacing: 0.03em; }
+
+  /* PERIOD CARDS */
+  .period-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .period-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  .period-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--bark);
+  }
+  .period-meta { display: flex; align-items: center; gap: 8px; }
+  .badge {
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .badge-ok { background: #EAF3DE; color: #2A5209; }
+  .badge-warn { background: #FEF3CD; color: #7A5200; }
+  .badge-over { background: #FCEBEB; color: #7A2828; }
+  .remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .remove-btn:hover { background: var(--border-light); color: var(--text-primary); }
+  .period-dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 10px;
+    align-items: end;
+    margin-bottom: 0.75rem;
+  }
+  .dur-display {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 7px 0;
+    white-space: nowrap;
+  }
+  .task-header {
+    display: grid;
+    grid-template-columns: 1fr 56px 90px 28px;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .task-col-lbl { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+  .task-row {
+    display: grid;
+    grid-template-columns: 1fr 56px 90px 28px;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .task-row select, .task-row input { font-size: 12px; }
+  .remove-task-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 0;
+    line-height: 1;
+  }
+  .remove-task-btn:hover { color: var(--danger); }
+  .add-task-btn {
+    background: none;
+    border: none;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .add-task-btn:hover { color: var(--text-primary); }
+  .period-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+    margin-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+  .period-footer-lbl { font-size: 11px; color: var(--text-muted); }
+  .period-footer-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--bark);
+  }
+  .period-notes { margin-top: 10px; }
+  .period-notes textarea { font-size: 12px; resize: vertical; min-height: 48px; }
+
+  /* ADD PERIOD */
+  .add-period-btn {
+    width: 100%;
+    padding: 10px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    background: transparent;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+    margin-bottom: 1rem;
+  }
+  .add-period-btn:hover { border-color: var(--shore); color: var(--text-primary); background: var(--white); }
+
+  /* ACTIONS */
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.5rem; }
+  .btn {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 11px 16px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.03em;
+    border: 1px solid;
+  }
+  .btn-print {
+    background: var(--white);
+    border-color: var(--border);
+    color: var(--text-primary);
+  }
+  .btn-print:hover { background: var(--cream); border-color: var(--shore); }
+  .btn-export {
+    background: var(--bark);
+    border-color: var(--bark);
+    color: var(--sand);
+  }
+  .btn-export:hover { background: var(--shore); border-color: var(--shore); }
+  .btn-dashboard {
+    width: 100%;
+    background: linear-gradient(135deg, #2C4A3E, #1a5c6e);
+    border-color: #2C4A3E;
+    color: #B8F0E0;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin-top: 10px;
+  }
+  .btn-dashboard:hover { background: linear-gradient(135deg, #3D6B5A, #1e7a90); }
+
+  /* LINE ITEM CHECKBOXES */
+  .lineitem-list { display: flex; flex-direction: column; gap: 6px; }
+  .lineitem-check { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius); transition: background 0.15s; }
+  .lineitem-check:hover { background: var(--cream); }
+  .lineitem-check.checked { background: #EAF3DE; border-color: #639922; }
+  .lineitem-check input[type=checkbox] { margin-top: 2px; flex-shrink: 0; width: auto; }
+  .lineitem-code { font-size: 12px; font-weight: 500; color: var(--text-primary); }
+  .lineitem-desc { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+  /* PLAN HOURS */
+  .plan-hours-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+  .plan-hours-card { background: var(--cream); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; }
+  .plan-hours-card label { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 5px; }
+  .plan-hours-card input { background: var(--white); }
+  .hours-derived { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-light); }
+  .derived-item { text-align: center; }
+  .derived-num { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; color: var(--bark); line-height: 1; }
+  .derived-lbl { font-size: 10px; color: var(--text-muted); margin-top: 3px; letter-spacing: 0.03em; }
+  .derived-warn { color: var(--danger); }
+  .transfer-note { background: #FEF3CD; border: 1px solid #E8C84A; border-radius: var(--radius); padding: 8px 12px; font-size: 11px; color: #5C4200; margin-top: 10px; line-height: 1.5; }
+
+  /* PRIVACY NOTICE */
+  .privacy-notice {
+    background: #EAF3DE;
+    border: 1px solid #A8CC7A;
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-size: 11px;
+    color: #2A5209;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+  }
+  .privacy-notice strong { font-weight: 500; }
+
+  /* PRINT STYLES */
+  @media print {
+    body { background: white; }
+    header { background: var(--bark) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .offline-notice, .actions, .add-period-btn, .remove-btn, .remove-task-btn, .add-task-btn, .privacy-notice { display: none !important; }
+    .container { padding: 1rem; max-width: 100%; }
+    .section, .period-card { break-inside: avoid; }
+    input, select, textarea { border: none !important; background: transparent !important; }
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 11px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="offline-notice">
+  <strong>Privacy notice:</strong> This file runs entirely in your browser. No data is transmitted or stored externally. Safe to use with identifiable participant information.
+</div>
+
+<header>
+  <div class="logo-block">
+    <div class="logo-name">Behaviour Support Practitioner</div>
+    <div class="provider-fields">
+      <div class="field"><label>Provider / Practice name</label><input type="text" id="h-provider" placeholder="Organisation or practice name"></div>
+      <div class="field"><label>Practitioner name</label><input type="text" id="h-practitioner" placeholder="BSP name"></div>
+    </div>
+  </div>
+  <div class="doc-label">Participant Engagement Plan</div>
+</header>
+
+<div class="container">
+
+  <div class="privacy-notice">
+    <strong>Offline tool — participant data stays on your device.</strong> This file has no internet connection and no external services. Fill in participant details freely. Print or save as PDF for your records. Do not share this HTML file if it contains completed participant data.
+  </div>
+
+  <!-- PARTICIPANT DETAILS -->
+  <div class="section">
+    <div class="section-title">Participant & plan details</div>
+    <div class="grid2">
+      <div class="field"><label>Participant name</label><input type="text" id="p-name" placeholder="Full name"></div>
+      <div class="field"><label>NDIS number</label><input type="text" id="p-ndis" placeholder="XXX XXX XXXX"></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Plan start date</label><input type="date" id="p-start"></div>
+      <div class="field"><label>Plan end date</label><input type="date" id="p-end"></div>
+    </div>
+    <div class="grid2" style="margin-top:10px;">
+      <div class="field"><label>Behaviour Support Practitioner</label><input type="text" id="p-bsp" placeholder="Name"></div>
+      <div class="field"><label>Support Coordinator / Primary contact</label><input type="text" id="p-sc" placeholder="Name"></div>
+    </div>
+    <div style="margin-top:10px;">
+      <label style="font-size:11px;font-weight:500;color:var(--text-secondary);letter-spacing:0.03em;display:block;margin-bottom:6px;">Line items applicable to this plan</label>
+      <div class="lineitem-list">
+        <label class="lineitem-check" id="li-label-11022" onclick="toggleLineItem('11_022_0110_7_3', this)">
+          <input type="checkbox" id="li-11022" value="11_022_0110_7_3">
+          <div><div class="lineitem-code">11_022_0110_7_3 — Specialist Behavioural Intervention Support</div><div class="lineitem-desc">CB – Improved Relationships | $232.99/hr national | Reg. Group 0110</div></div>
+        </label>
+        <label class="lineitem-check" id="li-label-11023" onclick="toggleLineItem('11_023_0110_7_3', this)">
+          <input type="checkbox" id="li-11023" value="11_023_0110_7_3">
+          <div><div class="lineitem-code">11_023_0110_7_3 — Behaviour Management Plan Incl. Training in Strategies</div><div class="lineitem-desc">CB – Improved Relationships | $232.99/hr national | Reg. Group 0110</div></div>
+        </label>
+        <label class="lineitem-check" id="li-label-15056" onclick="toggleLineItem('15_056_0128_1_3', this)">
+          <input type="checkbox" id="li-15056" value="15_056_0128_1_3">
+          <div><div class="lineitem-code">15_056_0128_1_3 — Behaviour Support Intervention</div><div class="lineitem-desc">Core – Assistance with Daily Living | $193.99/hr national | Reg. Group 0128</div></div>
+        </label>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:10px;">
+      <div class="field"><label>Restrictive practices involved?</label>
+        <select id="p-rp">
+          <option value="no">No</option>
+          <option value="pending">Pending authorisation</option>
+          <option value="yes">Yes — authorised</option>
+        </select>
+      </div>
+      <div class="field"><label>Previous BSP practitioner (if transfer)</label><input type="text" id="p-prev-bsp" placeholder="Name or organisation"></div>
+    </div>
+  </div>
+
+  <!-- PLAN HOURS -->
+  <div class="section">
+    <div class="section-title">NDIS plan hours & funding context</div>
+    <div class="plan-hours-grid">
+      <div class="plan-hours-card">
+        <label>Total hours in plan</label>
+        <input type="number" id="ph-total" min="0" step="0.5" placeholder="e.g. 40" oninput="updatePlanHours()">
+      </div>
+      <div class="plan-hours-card">
+        <label>Hours already used / transferred</label>
+        <input type="number" id="ph-used" min="0" step="0.5" placeholder="e.g. 8" oninput="updatePlanHours()">
+      </div>
+      <div class="plan-hours-card">
+        <label>Plan hours remaining (available to you)</label>
+        <input type="number" id="ph-remaining" min="0" step="0.5" placeholder="Auto-calculates" readonly style="background:var(--border-light);color:var(--text-secondary);">
+      </div>
+    </div>
+    <div class="hours-derived" id="hours-derived" style="display:none;">
+      <div class="derived-item">
+        <div class="derived-num" id="ph-vs-estimate">—</div>
+        <div class="derived-lbl">Plan hrs vs BSP estimate</div>
+      </div>
+      <div class="derived-item">
+        <div class="derived-num" id="ph-vs-allocated">—</div>
+        <div class="derived-lbl">Plan hrs vs allocated periods</div>
+      </div>
+    </div>
+    <div id="transfer-note" class="transfer-note" style="display:none;"></div>
+  </div>
+
+  <!-- COMPLEXITY TIER -->
+  <div class="section">
+    <div class="section-title">Complexity tier</div>
+    <div class="tier-grid" id="tier-btns">
+      <div class="tier-btn t-standard active" onclick="setTier('standard', this)">
+        <div class="tier-header"><span class="tier-dot dot-std"></span><span class="tier-name">Standard</span></div>
+        <div class="tier-desc">Single or mild-mod BOC, stable environment, willing stakeholders, no RP, limited comorbidities</div>
+      </div>
+      <div class="tier-btn t-complex" onclick="setTier('complex', this)">
+        <div class="tier-header"><span class="tier-dot dot-cmp"></span><span class="tier-name">Complex</span></div>
+        <div class="tier-desc">Multiple BOC/settings, some RP or pending, moderate trauma/MH, system navigation needed</div>
+      </div>
+      <div class="tier-btn t-high" onclick="setTier('high', this)">
+        <div class="tier-header"><span class="tier-dot dot-hi"></span><span class="tier-name">High complex</span></div>
+        <div class="tier-desc">Authorised RP, QBSC oversight, trauma/MH/AOD, crisis presentations, OOHC/forensic</div>
+      </div>
+    </div>
+    <div style="margin-top:10px; padding:8px 12px; background:var(--cream); border-radius:var(--radius); font-size:11px; color:var(--text-muted);">
+      When in doubt, start at Complex. It is easier to adjust downward than to renegotiate an under-scoped service agreement.
+    </div>
+  </div>
+
+  <!-- STAGE HOURS -->
+  <div class="section">
+    <div class="section-title">Estimated hours by BSP stage <span style="font-weight:300; text-transform:none; letter-spacing:0;">(mid-range — adjust to clinical judgement)</span></div>
+    <div id="stage-table"></div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="section">
+    <div class="section-title">Plan summary</div>
+    <div class="summary-grid" style="grid-template-columns: repeat(5, 1fr);">
+      <div class="summary-card">
+        <div class="summary-num" id="s-plan-hrs">—</div>
+        <div class="summary-lbl">Plan hrs available</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-num" id="s-total">0</div>
+        <div class="summary-lbl">BSP estimate</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-num" id="s-allocated">0</div>
+        <div class="summary-lbl">Hrs allocated</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-num" id="s-remaining">0</div>
+        <div class="summary-lbl">Unallocated</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-num" id="s-periods">0</div>
+        <div class="summary-lbl">Funding periods</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUNDING PERIODS -->
+  <div class="section">
+    <div class="section-title">Funding periods</div>
+    <div id="periods-container"></div>
+    <button class="add-period-btn" onclick="addPeriod()">+ Add funding period</button>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn btn-print" onclick="window.print()">Print / Save as PDF</button>
+    <button class="btn btn-export" onclick="exportCSV()">Export summary CSV</button>
+  </div>
+  <button class="btn btn-dashboard" onclick="exportToDashboard(this)">⬡ Export to Command Centre Dashboard</button>
+
+</div>
+
+<footer>
+  BSP Participant Engagement Plan Calculator &nbsp;|&nbsp; Version 1.0 — April 2026<br>
+  <span style="font-size:10px;">This tool runs locally. No data leaves this device. Rates reflect NDIS PAPL 2025–26 (effective 1 July 2025). Always verify current rates at ndis.gov.au</span>
+</footer>
+
+<script>
+const STAGES = {
+  standard: {
+    'Engagement & admin (intake, SA, referral review)': 3,
+    'FBA stage 1 (collateral, file review, obs plan)': 6,
+    'FBA stage 2 (direct obs, interviews, hypothesis)': 6,
+    'BSP writing (draft, review, finalisation)': 4.5,
+    'Stakeholder training (workshop/coaching + prep)': 3,
+    'Implementation support (per visit)': 1.5,
+    'Monitoring & review (per review cycle)': 1.5,
+    'Annual BSP review (full reassessment)': 4,
+  },
+  complex: {
+    'Engagement & admin (intake, SA, referral review)': 4.5,
+    'FBA stage 1 (collateral, file review, obs plan)': 9,
+    'FBA stage 2 (direct obs, interviews, hypothesis)': 11.5,
+    'BSP writing (draft, review, finalisation)': 7.5,
+    'Stakeholder training (workshop/coaching + prep)': 4.5,
+    'Implementation support (per visit)': 2.5,
+    'Monitoring & review (per review cycle)': 2.5,
+    'Annual BSP review (full reassessment)': 6.5,
+  },
+  high: {
+    'Engagement & admin (intake, SA, referral review)': 6,
+    'FBA stage 1 (collateral, file review, obs plan)': 15,
+    'FBA stage 2 (direct obs, interviews, hypothesis)': 18.5,
+    'BSP writing (draft, review, finalisation)': 12,
+    'Stakeholder training (workshop/coaching + prep)': 6,
+    'Implementation support (per visit)': 3,
+    'Monitoring & review (per review cycle)': 3,
+    'Annual BSP review (full reassessment)': 9,
+  }
+};
+
+let selectedLineItems = new Set();
+
+function toggleLineItem(code, labelEl) {
+  setTimeout(() => {
+    const cb = labelEl.querySelector('input[type=checkbox]');
+    if (cb.checked) { selectedLineItems.add(code); labelEl.classList.add('checked'); }
+    else { selectedLineItems.delete(code); labelEl.classList.remove('checked'); }
+  }, 0);
+}
+
+function getSelectedLineItems() {
+  return Array.from(selectedLineItems);
+}
+
+function updatePlanHours() {
+  const total = parseFloat(document.getElementById('ph-total').value) || 0;
+  const used = parseFloat(document.getElementById('ph-used').value) || 0;
+  const remaining = total > 0 ? Math.max(0, total - used) : 0;
+  const remInput = document.getElementById('ph-remaining');
+  if (total > 0) {
+    remInput.value = remaining.toFixed(1);
+  } else {
+    remInput.value = '';
+  }
+  updateSummary();
+  const derivedEl = document.getElementById('hours-derived');
+  const noteEl = document.getElementById('transfer-note');
+  if (total > 0) {
+    derivedEl.style.display = 'grid';
+    const estimate = totalStageHours();
+    const allocated = totalAllocated();
+    const vsEst = remaining - estimate;
+    const vsAlloc = remaining - allocated;
+    const estEl = document.getElementById('ph-vs-estimate');
+    const allocEl = document.getElementById('ph-vs-allocated');
+    estEl.textContent = (vsEst >= 0 ? '+' : '') + vsEst.toFixed(1) + ' hrs';
+    estEl.className = 'derived-num' + (vsEst < 0 ? ' derived-warn' : '');
+    allocEl.textContent = (vsAlloc >= 0 ? '+' : '') + vsAlloc.toFixed(1) + ' hrs';
+    allocEl.className = 'derived-num' + (vsAlloc < 0 ? ' derived-warn' : '');
+    if (used > 0) {
+      noteEl.style.display = 'block';
+      noteEl.innerHTML = `<strong>Mid-plan transfer note:</strong> ${used.toFixed(1)} hrs have already been used or are attributed to a previous practitioner. This plan will work from the remaining ${remaining.toFixed(1)} hrs. Confirm the previous practitioner's service booking has been ended before billing against this plan.`;
+    } else {
+      noteEl.style.display = 'none';
+    }
+  } else {
+    derivedEl.style.display = 'none';
+    noteEl.style.display = 'none';
+  }
+}
+
+
+let stageHours = {};
+let periods = [];
+let periodCount = 0;
+let currentTier = 'standard';
+
+function setTier(tier, el) {
+  currentTier = tier;
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderStages();
+  updateSummary();
+}
+
+function renderStages() {
+  stageHours = Object.assign({}, STAGES[currentTier]);
+  const el = document.getElementById('stage-table');
+  let html = '';
+  for (const [name, hrs] of Object.entries(stageHours)) {
+    html += `<div class="stage-row">
+      <div class="stage-name">${name}</div>
+      <div class="stage-hrs">
+        <input type="number" min="0" step="0.5" value="${hrs}"
+          onchange="updateStageHour('${CSS.escape(name)}', '${name}', this.value)">
+      </div>
+    </div>`;
+  }
+  const total = Object.values(stageHours).reduce((a,b)=>a+b,0);
+  html += `<div class="stage-total-row">
+    <span style="font-size:13px;color:var(--text-secondary);">Estimated total</span>
+    <span class="stage-total-num" id="stage-total">${total.toFixed(1)} hrs</span>
+  </div>`;
+  el.innerHTML = html;
+}
+
+function updateStageHour(escaped, name, val) {
+  stageHours[name] = parseFloat(val) || 0;
+  const total = Object.values(stageHours).reduce((a,b)=>a+b,0);
+  const el = document.getElementById('stage-total');
+  if (el) el.textContent = total.toFixed(1) + ' hrs';
+  updateSummary();
+}
+
+function totalStageHours() {
+  return Object.values(stageHours).reduce((a,b)=>a+b,0);
+}
+
+function addPeriod() {
+  periodCount++;
+  periods.push({
+    id: 'p' + periodCount,
+    num: periodCount,
+    startDate: '', endDate: '', notes: '',
+    tasks: [
+      { stage: '', hrs: 0, qty: 1 },
+      { stage: '', hrs: 0, qty: 1 },
+      { stage: '', hrs: 0, qty: 1 },
+    ]
+  });
+  renderPeriods();
+  updateSummary();
+}
+
+function removePeriod(id) {
+  periods = periods.filter(p => p.id !== id);
+  renderPeriods();
+  updateSummary();
+}
+
+function addTask(pid) {
+  const p = periods.find(x => x.id === pid);
+  if (p) { p.tasks.push({ stage: '', hrs: 0, qty: 1 }); renderPeriods(); }
+}
+
+function removeTask(pid, idx) {
+  const p = periods.find(x => x.id === pid);
+  if (p && p.tasks.length > 1) { p.tasks.splice(idx, 1); renderPeriods(); updateSummary(); }
+}
+
+function updateTask(pid, idx, field, val) {
+  const p = periods.find(x => x.id === pid);
+  if (!p) return;
+  if (field === 'stage') {
+    p.tasks[idx].stage = val;
+    if (val && stageHours[val] !== undefined) p.tasks[idx].hrs = stageHours[val];
+  } else if (field === 'qty') {
+    p.tasks[idx].qty = parseInt(val) || 1;
+  } else {
+    p.tasks[idx].hrs = parseFloat(val) || 0;
+  }
+  renderPeriods();
+  updateSummary();
+}
+
+function updatePeriodField(pid, field, val) {
+  const p = periods.find(x => x.id === pid);
+  if (p) {
+    p[field] = val;
+    if (field === 'startDate' || field === 'endDate') {
+      const dur = document.getElementById('dur-' + pid);
+      if (dur) dur.textContent = calcDur(p.startDate, p.endDate);
+    }
+  }
+}
+
+function calcDur(s, e) {
+  if (!s || !e) return '—';
+  const d1 = new Date(s), d2 = new Date(e);
+  const days = Math.round((d2 - d1) / 86400000);
+  if (days <= 0) return '—';
+  const wks = Math.round(days / 7);
+  return wks >= 4 ? Math.round(wks / 4.33) + ' months' : wks + ' weeks';
+}
+
+const PER_VISIT_STAGES = ['Implementation support (per visit)', 'Monitoring & review (per review cycle)'];
+
+function isPerVisit(stage) {
+  return PER_VISIT_STAGES.includes(stage);
+}
+
+function taskTotal(t) {
+  const hrs = parseFloat(t.hrs) || 0;
+  const qty = (isPerVisit(t.stage) ? (parseInt(t.qty) || 1) : 1);
+  return hrs * qty;
+}
+
+function periodTotal(p) {
+  return p.tasks.reduce((a, t) => a + taskTotal(t), 0);
+}
+
+function totalAllocated() {
+  return periods.reduce((a, p) => a + periodTotal(p), 0);
+}
+
+function renderPeriods() {
+  const stageOpts = ['<option value="">— Select BSP stage —</option>',
+    ...Object.keys(stageHours).map(s => `<option value="${s}">${s}</option>`),
+    '<option value="custom">Custom task</option>'
+  ].join('');
+
+  const container = document.getElementById('periods-container');
+  let html = '';
+
+  periods.forEach((p, pi) => {
+    const pt = periodTotal(p);
+    const total = totalStageHours();
+    let badgeHtml = '';
+    if (pt > 0) {
+      if (pt > total) badgeHtml = `<span class="badge badge-over">${pt.toFixed(1)} hrs — over estimate</span>`;
+      else if (pt >= total * 0.9) badgeHtml = `<span class="badge badge-ok">${pt.toFixed(1)} hrs</span>`;
+      else badgeHtml = `<span class="badge badge-warn">${pt.toFixed(1)} hrs</span>`;
+    }
+
+    html += `<div class="period-card" id="card-${p.id}">
+      <div class="period-header">
+        <span class="period-num">Funding period ${pi + 1}</span>
+        <div class="period-meta">
+          ${badgeHtml}
+          <button class="remove-btn" onclick="removePeriod('${p.id}')">Remove</button>
+        </div>
+      </div>
+      <div class="period-dates">
+        <div class="field">
+          <label>Start date</label>
+          <input type="date" value="${p.startDate}" onchange="updatePeriodField('${p.id}','startDate',this.value)">
+        </div>
+        <div class="field">
+          <label>End date</label>
+          <input type="date" value="${p.endDate}" onchange="updatePeriodField('${p.id}','endDate',this.value)">
+        </div>
+        <div class="field">
+          <label>Duration</label>
+          <div class="dur-display" id="dur-${p.id}">${calcDur(p.startDate, p.endDate)}</div>
+        </div>
+      </div>
+      <div class="task-header">
+        <div class="task-col-lbl">BSP stage / task</div>
+        <div class="task-col-lbl" style="text-align:center;">Qty</div>
+        <div class="task-col-lbl" style="text-align:right;">Hrs (total)</div>
+        <div></div>
+      </div>`;
+
+    p.tasks.forEach((t, ti) => {
+      const perVisit = isPerVisit(t.stage);
+      const qty = t.qty || 1;
+      const tt = taskTotal(t);
+      const qtyInput = perVisit
+        ? `<input type="number" min="1" step="1" value="${qty}" title="Number of visits / cycles"
+            onchange="updateTask('${p.id}',${ti},'qty',this.value)" style="text-align:center;">`
+        : `<div style="text-align:center;font-size:12px;color:var(--text-muted);padding:7px 0;">—</div>`;
+      const hrsDisplay = perVisit
+        ? `<div style="text-align:right;font-size:12px;padding:7px 4px;color:var(--text-secondary);">${(parseFloat(t.hrs)||0).toFixed(1)} × ${qty} = <strong>${tt.toFixed(1)}</strong></div>`
+        : `<input type="number" min="0" step="0.5" value="${t.hrs || ''}" placeholder="hrs"
+            onchange="updateTask('${p.id}',${ti},'hrs',this.value)">`;
+      html += `<div class="task-row">
+        <select onchange="updateTask('${p.id}',${ti},'stage',this.value)" data-pid="${p.id}" data-ti="${ti}">
+          ${stageOpts}
+        </select>
+        ${qtyInput}
+        ${hrsDisplay}
+        <button class="remove-task-btn" onclick="removeTask('${p.id}',${ti})">×</button>
+      </div>`;
+    });
+
+    html += `<button class="add-task-btn" onclick="addTask('${p.id}')">+ add task</button>
+      <div class="period-notes">
+        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Clinical notes / rationale (optional)</label>
+        <textarea rows="2" placeholder="e.g. Priority is FBA completion given placement risk — extended direct obs expected."
+          onchange="updatePeriodField('${p.id}','notes',this.value)">${p.notes || ''}</textarea>
+      </div>
+      <div class="period-footer">
+        <span class="period-footer-lbl">Period total</span>
+        <span class="period-footer-val">${pt.toFixed(1)} hrs</span>
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+
+  periods.forEach(p => {
+    p.tasks.forEach((t, ti) => {
+      const selects = document.querySelectorAll(`#card-${p.id} .task-row select`);
+      if (selects[ti] && t.stage) selects[ti].value = t.stage;
+    });
+  });
+}
+
+function updateSummary() {
+  const total = totalStageHours();
+  const alloc = totalAllocated();
+  const rem = total - alloc;
+  const planTotal = parseFloat(document.getElementById('ph-total').value) || 0;
+  const planUsed = parseFloat(document.getElementById('ph-used').value) || 0;
+  const planAvail = planTotal > 0 ? Math.max(0, planTotal - planUsed) : null;
+  document.getElementById('s-plan-hrs').textContent = planAvail !== null ? planAvail.toFixed(1) : '—';
+  document.getElementById('s-plan-hrs').style.color = (planAvail !== null && planAvail < total) ? 'var(--danger)' : 'var(--bark)';
+  document.getElementById('s-total').textContent = total.toFixed(1);
+  document.getElementById('s-allocated').textContent = alloc.toFixed(1);
+  document.getElementById('s-periods').textContent = periods.length;
+  const remEl = document.getElementById('s-remaining');
+  remEl.textContent = Math.abs(rem).toFixed(1) + (rem < 0 ? ' over' : '');
+  remEl.style.color = rem < 0 ? 'var(--danger)' : rem === 0 ? 'var(--success)' : 'var(--text-primary)';
+}
+
+function exportCSV() {
+  const name = document.getElementById('p-name').value || 'Unknown';
+  const ndis = document.getElementById('p-ndis').value || '';
+  const bsp = document.getElementById('p-bsp').value || '';
+  const lineItems = getSelectedLineItems().join('; ') || '(none selected)';
+  const tier = currentTier;
+  const planTotal = document.getElementById('ph-total').value || '';
+  const planUsed = document.getElementById('ph-used').value || '';
+  const planRemaining = document.getElementById('ph-remaining').value || '';
+  const prevBsp = document.getElementById('p-prev-bsp').value || '';
+
+  let csv = 'BSP Participant Engagement Plan\n';
+  csv += `Provider,${document.getElementById('h-provider').value || ''}\nPractitioner,${document.getElementById('h-practitioner').value || bsp}\n`;
+  csv += `Participant,${name}\nNDIS Number,${ndis}\nBSP,${bsp}\nLine Items,${lineItems}\nTier,${tier}\n`;
+  if (prevBsp) csv += `Previous practitioner,${prevBsp}\n`;
+  if (planTotal) {
+    csv += `\nPLAN HOURS\nTotal in plan,${planTotal}\nAlready used/attributed,${planUsed || 0}\nAvailable to this practitioner,${planRemaining}\n`;
+  }
+  csv += '\nSTAGE ESTIMATES\nStage,Estimated Hours\n';
+  for (const [s, h] of Object.entries(stageHours)) {
+    csv += `"${s}",${h}\n`;
+  }
+  csv += `Total,${totalStageHours().toFixed(1)}\n\n`;
+  csv += 'Period,Start,End,Duration,Task,Hrs per visit,Qty,Total hrs,Notes\n';
+  periods.forEach((p, pi) => {
+    const dur = calcDur(p.startDate, p.endDate);
+    p.tasks.forEach((t, ti) => {
+      const qty = isPerVisit(t.stage) ? (t.qty || 1) : 1;
+      const tt = taskTotal(t);
+      csv += `"Period ${pi+1}","${p.startDate}","${p.endDate}","${dur}","${t.stage || ''}",${t.hrs || 0},${qty},${tt.toFixed(1)},"${ti === 0 ? (p.notes||'').replace(/"/g,"'") : ''}"\n`;
+    });
+  });
+  csv += `\nTotal allocated,${totalAllocated().toFixed(1)}\n`;
+  csv += `Unallocated,${(totalStageHours() - totalAllocated()).toFixed(1)}\n`;
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Engagement_Plan_${name.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportToDashboard(btn) {
+  var name = document.getElementById('p-name').value || 'Unknown Participant';
+  var ndis = document.getElementById('p-ndis').value || '';
+  var bsp  = document.getElementById('p-bsp').value || '';
+  var tier = currentTier;
+  var planRemaining = parseFloat(document.getElementById('ph-remaining').value) || 0;
+  var rp = document.getElementById('p-rp').value || 'no';
+
+  var tasks = [];
+  periods.forEach(function(p, pi) {
+    if (!p.endDate) return;
+    var daysUntil = Math.round((new Date(p.endDate) - new Date()) / 86400000);
+    var status = 'upcoming';
+    if (daysUntil < 0) status = 'overdue';
+    else if (daysUntil <= 7) status = 'urgent';
+    else if (daysUntil <= 21) status = 'upcoming';
+    else status = 'steady';
+    var primaryTask = p.tasks.find(function(t) { return t.stage && t.stage !== ''; }) || {};
+    tasks.push({
+      id: Date.now() + pi,
+      name: name,
+      type: primaryTask.stage ? primaryTask.stage.split('(')[0].trim() : 'Period ' + (pi+1) + ' deliverable',
+      dueDate: p.endDate,
+      status: status,
+      invoiced: false,
+      lastSession: '',
+      notes: tier.charAt(0).toUpperCase() + tier.slice(1) + ' complexity · ' + periodTotal(p).toFixed(1) + ' hrs · Period ' + (pi+1) + ' of ' + periods.length + (p.notes ? ' · ' + p.notes : ''),
+    });
+  });
+
+  if (tasks.length === 0) {
+    var due = new Date(); due.setDate(due.getDate() + 14);
+    tasks.push({
+      id: Date.now(),
+      name: name,
+      type: 'BSP Report',
+      dueDate: due.toISOString().slice(0,10),
+      status: tier === 'high' ? 'urgent' : 'upcoming',
+      invoiced: false,
+      lastSession: '',
+      notes: tier.charAt(0).toUpperCase() + tier.slice(1) + ' complexity · ' + totalStageHours().toFixed(1) + ' hrs estimated',
+    });
+  }
+
+  var payload = {
+    version: '1.0',
+    exportedAt: new Date().toISOString(),
+    participant: { name: name, ndis: ndis, bsp: bsp, tier: tier, planRemaining: planRemaining, rp: rp },
+    stageHours: stageHours,
+    totalEstimatedHours: totalStageHours(),
+    tasks: tasks,
+  };
+
+  var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'BSP_' + name.replace(/\s+/g,'_') + '_dashboard.bsp';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  var orig = btn.textContent;
+  btn.textContent = '✓ Downloaded! Import into your Command Centre.';
+  btn.style.background = '#2C4A3E';
+  setTimeout(function() { btn.textContent = orig; btn.style.background = ''; }, 3000);
+}
+
+renderStages();
+updateSummary();
+</script>
+</body>
+</html>

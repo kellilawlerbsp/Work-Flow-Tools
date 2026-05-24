@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driftwood Therapeutic Supports — Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0c0f18;
+  --surface: #141720;
+  --card:    #1a1e2e;
+  --border:  #252a3d;
+  --teal:    #2dd4bf;
+  --blue:    #60b4ff;
+  --purple:  #b57bee;
+  --amber:   #ffb347;
+  --green:   #4ade80;
+  --text:    #f0f2ff;
+  --muted:   #8b8fa8;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* BACKGROUND GLOW */
+body::before {
+  content: '';
+  position: fixed;
+  top: -200px; left: 50%;
+  transform: translateX(-50%);
+  width: 800px; height: 600px;
+  background: radial-gradient(ellipse, #2dd4bf0d 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 60px 24px 80px; position: relative; z-index: 1; }
+
+/* HEADER */
+.header { text-align: center; margin-bottom: 64px; }
+.eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--teal);
+  margin-bottom: 16px; display: block;
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 600; line-height: 1.1;
+  color: var(--text); margin-bottom: 8px;
+}
+.logo em { color: var(--teal); font-style: italic; }
+.tagline {
+  font-size: 15px; color: var(--muted); font-weight: 300;
+  max-width: 400px; margin: 0 auto; line-height: 1.6;
+}
+
+/* DIVIDER */
+.divider {
+  display: flex; align-items: center; gap: 16px;
+  margin: 0 auto 48px; max-width: 300px;
+}
+.divider-line { flex: 1; height: 1px; background: var(--border); }
+.divider-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+
+/* TOOL GRID */
+.tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
+
+@media (max-width: 580px) { .tools { grid-template-columns: 1fr; } }
+
+.tool-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 28px 24px;
+  text-decoration: none;
+  color: var(--text);
+  display: flex; flex-direction: column;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  position: relative; overflow: hidden;
+}
+.tool-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: 18px 18px 0 0;
+  transition: opacity 0.2s;
+}
+.tool-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+}
+
+.card-teal::before  { background: linear-gradient(90deg, var(--teal), var(--blue)); }
+.card-purple::before{ background: linear-gradient(90deg, var(--purple), var(--blue)); }
+.card-amber::before { background: linear-gradient(90deg, var(--amber), #ff6b6b); }
+.card-green::before { background: linear-gradient(90deg, var(--green), var(--teal)); }
+
+.card-teal:hover  { border-color: var(--teal);   box-shadow: 0 16px 40px rgba(45,212,191,0.1); }
+.card-purple:hover{ border-color: var(--purple); box-shadow: 0 16px 40px rgba(181,123,238,0.1); }
+.card-amber:hover { border-color: var(--amber);  box-shadow: 0 16px 40px rgba(255,179,71,0.1); }
+.card-green:hover { border-color: var(--green);  box-shadow: 0 16px 40px rgba(74,222,128,0.1); }
+
+.card-icon { font-size: 32px; margin-bottom: 16px; }
+.card-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.card-teal   .card-label { color: var(--teal); }
+.card-purple .card-label { color: var(--purple); }
+.card-amber  .card-label { color: var(--amber); }
+.card-green  .card-label { color: var(--green); }
+
+.card-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; line-height: 1.2; }
+.card-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; flex: 1; margin-bottom: 20px; }
+.card-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 700;
+  padding: 8px 16px; border-radius: 8px;
+  align-self: flex-start;
+  transition: opacity 0.15s;
+}
+.card-cta:hover { opacity: 0.85; }
+.card-teal   .card-cta { background: rgba(45,212,191,0.15);  color: var(--teal); }
+.card-purple .card-cta { background: rgba(181,123,238,0.15); color: var(--purple); }
+.card-amber  .card-cta { background: rgba(255,179,71,0.15);  color: var(--amber); }
+.card-green  .card-cta { background: rgba(74,222,128,0.15);  color: var(--green); }
+
+/* WORKFLOW STRIP */
+.workflow {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px 28px; margin-bottom: 40px;
+}
+.workflow-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 20px;
+}
+.workflow-steps {
+  display: flex; align-items: center; gap: 0;
+  flex-wrap: wrap; gap: 8px;
+}
+.step {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px; flex: 1; min-width: 140px;
+}
+.step-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; flex-shrink: 0;
+}
+.step-text { font-size: 12px; line-height: 1.4; }
+.step-text strong { display: block; font-weight: 700; font-size: 12px; }
+.step-text span { color: var(--muted); font-size: 11px; }
+.arrow { color: var(--border); font-size: 18px; flex-shrink: 0; display: none; }
+@media (min-width: 600px) { .arrow { display: block; } }
+
+/* FOOTER */
+footer {
+  text-align: center; font-size: 12px; color: var(--muted);
+  padding-top: 40px; border-top: 1px solid var(--border);
+  line-height: 1.8;
+}
+footer a { color: var(--teal); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="header">
+    <span class="eyebrow">Practice Tools</span>
+    <h1 class="logo">Driftwood<br><em>Therapeutic Supports</em></h1>
+    <p class="tagline">Your practice tools — all in one place. Bookmark this page.</p>
+  </header>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-dot"></div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="tools">
+
+    <a href="command-centre.html" class="tool-card card-teal">
+      <div class="card-icon">🎯</div>
+      <div class="card-label">Daily workflow</div>
+      <div class="card-title">Command Centre</div>
+      <div class="card-desc">Your daily briefing, client task list, deadlines, and caseload snapshot. Starts here every day.</div>
+      <span class="card-cta">Open dashboard →</span>
+    </a>
+
+    <a href="BSP_Engagement_Plan_Calculator.html" class="tool-card card-purple">
+      <div class="card-icon">📋</div>
+      <div class="card-label">Client planning</div>
+      <div class="card-title">Engagement Plan Calculator</div>
+      <div class="card-desc">Set up a new client engagement — complexity tier, stage hours, funding periods. Exports directly to the Command Centre.</div>
+      <span class="card-cta">Open calculator →</span>
+    </a>
+
+    <a href="financial-tracker.html" class="tool-card card-amber">
+      <div class="card-icon">💰</div>
+      <div class="card-label">Financials</div>
+      <div class="card-title">Financial Tracker</div>
+      <div class="card-desc">Track your fortnightly income pipeline — from Splose hours through to reconciliation in Xero. Never lose track of a PO.</div>
+      <span class="card-cta">Open tracker →</span>
+    </a>
+
+    <a href="Xero_Setup_Guide_Driftwood.docx" class="tool-card card-green" download>
+      <div class="card-icon">📄</div>
+      <div class="card-label">Reference</div>
+      <div class="card-title">Xero Setup Guide</div>
+      <div class="card-desc">Step-by-step Xero setup for your sole trader subcontracting setup — chart of accounts, income recording, and cash flow tracking.</div>
+      <span class="card-cta">Download guide →</span>
+    </a>
+
+  </div>
+
+  <!-- WORKFLOW -->
+  <div class="workflow">
+    <div class="workflow-title">Your daily workflow</div>
+    <div class="workflow-steps">
+      <div class="step">
+        <div class="step-num" style="background:rgba(45,212,191,0.15);color:#2dd4bf;">1</div>
+        <div class="step-text">
+          <strong>New client</strong>
+          <span>Engagement Plan Calculator → export .bsp</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(181,123,238,0.15);color:#b57bee;">2</div>
+        <div class="step-text">
+          <strong>Import to dashboard</strong>
+          <span>Command Centre → tasks auto-created</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(255,179,71,0.15);color:#ffb347;">3</div>
+        <div class="step-text">
+          <strong>Log hours in Splose</strong>
+          <span>Fortnightly → check PO matches</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(74,222,128,0.15);color:#4ade80;">4</div>
+        <div class="step-text">
+          <strong>Record in Financial Tracker</strong>
+          <span>PO → paid → reconcile in Xero</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Driftwood Therapeutic Supports &nbsp;·&nbsp; Kelli — ABSP &nbsp;·&nbsp; NDIS Reg. P0004594<br>
+    Tools run locally in your browser. No data is sent externally.<br>
+    <span style="font-size:11px;color:#4a4f6a;">Built May 2026</span>
+  </footer>
+
+</div>
+</body>
+</html>
