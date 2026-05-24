@@ -588,6 +588,9 @@ const STAGES = {
   standard: {
     'Engagement & admin (intake, SA, referral review)': 3,
     'FBA stage 1 (collateral, file review, obs plan)': 6,
+    'Direct observation — clinic (per session)': 1.5,
+    'Direct observation — offsite (per session)': 2,
+    'Information gathering (school/carer/support meetings)': 1.5,
     'FBA stage 2 (direct obs, interviews, hypothesis)': 6,
     'BSP writing (draft, review, finalisation)': 4.5,
     'Stakeholder training (workshop/coaching + prep)': 3,
@@ -598,6 +601,9 @@ const STAGES = {
   complex: {
     'Engagement & admin (intake, SA, referral review)': 4.5,
     'FBA stage 1 (collateral, file review, obs plan)': 9,
+    'Direct observation — clinic (per session)': 2,
+    'Direct observation — offsite (per session)': 3,
+    'Information gathering (school/carer/support meetings)': 2,
     'FBA stage 2 (direct obs, interviews, hypothesis)': 11.5,
     'BSP writing (draft, review, finalisation)': 7.5,
     'Stakeholder training (workshop/coaching + prep)': 4.5,
@@ -608,6 +614,9 @@ const STAGES = {
   high: {
     'Engagement & admin (intake, SA, referral review)': 6,
     'FBA stage 1 (collateral, file review, obs plan)': 15,
+    'Direct observation — clinic (per session)': 2.5,
+    'Direct observation — offsite (per session)': 4,
+    'Information gathering (school/carer/support meetings)': 3,
     'FBA stage 2 (direct obs, interviews, hypothesis)': 18.5,
     'BSP writing (draft, review, finalisation)': 12,
     'Stakeholder training (workshop/coaching + prep)': 6,
@@ -782,7 +791,13 @@ function calcDur(s, e) {
   return wks >= 4 ? Math.round(wks / 4.33) + ' months' : wks + ' weeks';
 }
 
-const PER_VISIT_STAGES = ['Implementation support (per visit)', 'Monitoring & review (per review cycle)'];
+const PER_VISIT_STAGES = [
+  'Implementation support (per visit)',
+  'Monitoring & review (per review cycle)',
+  'Direct observation — clinic (per session)',
+  'Direct observation — offsite (per session)',
+  'Information gathering (school/carer/support meetings)',
+];
 
 function isPerVisit(stage) {
   return PER_VISIT_STAGES.includes(stage);

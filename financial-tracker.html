@@ -6,146 +6,212 @@
 <title>Driftwood — Financial Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', system-ui, sans-serif; background: #0f1117; color: #f0f2ff; min-height: 100vh; padding: 24px 20px 80px; }
-.wrap { max-width: 820px; margin: 0 auto; }
+.wrap { max-width: 860px; margin: 0 auto; }
 
-.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-.header-eyebrow { font-size: 11px; color: #2dd4bf; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; }
-.header-h1 { font-size: 26px; font-weight: 800; font-family: Georgia, serif; line-height: 1.1; }
-.header-sub { font-size: 12px; color: #8b8fa8; margin-top: 3px; }
-.btn-primary { background: linear-gradient(135deg, #2dd4bf, #60b4ff); border: none; border-radius: 12px; color: #0f1117; padding: 10px 18px; font-weight: 800; font-size: 13px; cursor: pointer; font-family: inherit; }
+/* HEADER */
+.hdr { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.hdr-left .eyebrow { font-size: 11px; color: #2dd4bf; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; }
+.hdr-left h1 { font-size: 26px; font-weight: 800; font-family: Georgia, serif; line-height: 1.1; }
+.hdr-left .sub { font-size: 12px; color: #8b8fa8; margin-top: 3px; }
+.hdr-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-primary { background: linear-gradient(135deg, #2dd4bf, #60b4ff); border: none; border-radius: 10px; color: #0f1117; padding: 9px 16px; font-weight: 800; font-size: 13px; cursor: pointer; font-family: inherit; }
+.btn-secondary { background: #1a1d27; border: 1px solid #2e3250; border-radius: 10px; color: #8b8fa8; padding: 9px 16px; font-size: 13px; cursor: pointer; font-family: inherit; }
+.btn-secondary:hover { border-color: #b57bee; color: #b57bee; }
+
+/* ALERT BANNER */
+.alert-banner { background: rgba(255,77,109,0.12); border: 1px solid rgba(255,77,109,0.35); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; display: none; }
+.alert-banner.show { display: block; }
+.alert-title { font-size: 13px; font-weight: 700; color: #ff4d6d; margin-bottom: 6px; }
+.alert-item { font-size: 12px; color: #f0a0a0; padding: 2px 0; }
 
 /* SUMMARY CARDS */
-.summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+.sum-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
 .sum-card { background: #1a1d27; border: 1px solid #2e3250; border-radius: 14px; padding: 16px; text-align: center; }
-.sum-num { font-size: 26px; font-weight: 800; font-family: Georgia, serif; line-height: 1; margin-bottom: 4px; }
-.sum-lbl { font-size: 11px; color: #8b8fa8; text-transform: uppercase; letter-spacing: 0.5px; }
+.sum-num { font-size: 24px; font-weight: 800; font-family: Georgia, serif; line-height: 1; margin-bottom: 4px; }
+.sum-lbl { font-size: 10px; color: #8b8fa8; text-transform: uppercase; letter-spacing: 0.5px; }
+@media(max-width:580px){ .sum-grid { grid-template-columns: repeat(2,1fr); } }
 
-/* PIPELINE */
-.pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-bottom: 20px; background: #1a1d27; border: 1px solid #2e3250; border-radius: 14px; overflow: hidden; }
-.pipe-stage { padding: 14px 12px; border-right: 1px solid #2e3250; }
-.pipe-stage:last-child { border-right: none; }
-.pipe-label { font-size: 10px; color: #8b8fa8; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px; }
-.pipe-amount { font-size: 20px; font-weight: 800; font-family: Georgia, serif; line-height: 1; }
-.pipe-count { font-size: 11px; color: #8b8fa8; margin-top: 3px; }
-.pipe-bar { height: 3px; border-radius: 2px; margin-top: 8px; }
+/* TABS */
+.tabs { display: flex; gap: 4px; background: #1a1d27; border: 1px solid #2e3250; border-radius: 12px; padding: 4px; margin-bottom: 16px; }
+.tab { flex: 1; padding: 9px; border: none; background: transparent; color: #8b8fa8; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 9px; transition: all 0.2s; }
+.tab.active { background: #21253a; color: #f0f2ff; }
 
 /* SECTION */
 .section { background: #1a1d27; border: 1px solid #2e3250; border-radius: 14px; padding: 20px; margin-bottom: 16px; }
-.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #8b8fa8; }
-.btn-small { background: #21253a; border: 1px solid #2e3250; border-radius: 8px; color: #8b8fa8; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; }
-.btn-small:hover { border-color: #2dd4bf; color: #2dd4bf; }
+.sec-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+.sec-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #8b8fa8; }
+.btn-sm { background: #21253a; border: 1px solid #2e3250; border-radius: 8px; color: #8b8fa8; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; }
+.btn-sm:hover { border-color: #2dd4bf; color: #2dd4bf; }
+
+/* WEEK SELECTOR */
+.week-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.week-btn { background: #21253a; border: 1px solid #2e3250; border-radius: 8px; color: #8b8fa8; padding: 6px 12px; font-size: 18px; cursor: pointer; font-family: inherit; line-height: 1; }
+.week-btn:hover { border-color: #2dd4bf; color: #2dd4bf; }
+.week-label { font-size: 14px; font-weight: 700; color: #f0f2ff; flex: 1; text-align: center; }
+.week-total { font-size: 13px; color: #2dd4bf; font-weight: 700; }
+
+/* CLIENT HOUR ROWS */
+.client-row { display: grid; grid-template-columns: 1fr 80px 90px 90px 36px; gap: 8px; align-items: center; padding: 10px 0; border-bottom: 1px solid #21253a; }
+.client-row:last-of-type { border-bottom: none; }
+.client-name-cell { display: flex; align-items: center; gap: 8px; }
+.case-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.case-ok { background: #4ade80; }
+.case-missing { background: #ff4d6d; }
+.case-unknown { background: #8b8fa8; }
+.client-name { font-size: 14px; font-weight: 600; }
+.client-sub { font-size: 11px; color: #8b8fa8; margin-top: 1px; }
+.no-case-warning { font-size: 10px; color: #ff4d6d; font-weight: 700; }
+.col-lbl { font-size: 10px; color: #8b8fa8; text-transform: uppercase; letter-spacing: 0.5px; text-align: right; }
+.hrs-input { background: #0f1117; border: 1px solid #2e3250; border-radius: 8px; color: #f0f2ff; padding: 7px 10px; font-size: 14px; font-family: inherit; text-align: right; width: 100%; outline: none; }
+.hrs-input:focus { border-color: #2dd4bf; }
+.hrs-display { text-align: right; font-size: 14px; font-weight: 700; color: #f0f2ff; }
+.hrs-value { font-size: 14px; font-weight: 700; color: #2dd4bf; text-align: right; }
+.row-del { background: none; border: none; cursor: pointer; font-size: 14px; opacity: 0.4; padding: 4px; }
+.row-del:hover { opacity: 1; }
+.col-headers { display: grid; grid-template-columns: 1fr 80px 90px 90px 36px; gap: 8px; padding: 0 0 8px; border-bottom: 1px solid #2e3250; margin-bottom: 4px; }
+
+/* WEEK SUMMARY ROW */
+.week-summary-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 0; margin-top: 8px; border-top: 2px solid #2e3250; }
+.week-sum-label { font-size: 13px; color: #8b8fa8; }
+.week-sum-val { font-size: 20px; font-weight: 800; font-family: Georgia, serif; color: #2dd4bf; }
 
 /* TABLE */
 .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .data-table th { text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #8b8fa8; padding: 8px 10px; border-bottom: 1px solid #2e3250; }
-.data-table td { padding: 10px 10px; border-bottom: 1px solid #1a1d27; vertical-align: middle; }
+.data-table td { padding: 10px; border-bottom: 1px solid #1a1d27; vertical-align: middle; }
 .data-table tr:last-child td { border-bottom: none; }
-.data-table tr:hover td { background: #21253a88; }
-
-/* STATUS PILLS */
+.data-table tr:hover td { background: #21253a55; }
 .pill { display: inline-block; border-radius: 20px; padding: 2px 10px; font-size: 11px; font-weight: 700; }
-.pill-logged   { background: rgba(96,180,255,0.15); color: #60b4ff; border: 1px solid rgba(96,180,255,0.3); }
-.pill-po       { background: rgba(255,179,71,0.15); color: #ffb347; border: 1px solid rgba(255,179,71,0.3); }
-.pill-paid     { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
-.pill-reconciled { background: rgba(45,212,191,0.15); color: #2dd4bf; border: 1px solid rgba(45,212,191,0.3); }
-.pill-overdue  { background: rgba(255,77,109,0.15); color: #ff4d6d; border: 1px solid rgba(255,77,109,0.3); }
+.pill-logged     { background: rgba(96,180,255,0.15);  color: #60b4ff;  border: 1px solid rgba(96,180,255,0.3); }
+.pill-po         { background: rgba(255,179,71,0.15);  color: #ffb347;  border: 1px solid rgba(255,179,71,0.3); }
+.pill-paid       { background: rgba(74,222,128,0.15);  color: #4ade80;  border: 1px solid rgba(74,222,128,0.3); }
+.pill-reconciled { background: rgba(45,212,191,0.15);  color: #2dd4bf;  border: 1px solid rgba(45,212,191,0.3); }
+.act-btn { background: none; border: none; cursor: pointer; font-size: 15px; padding: 2px 4px; opacity: 0.55; }
+.act-btn:hover { opacity: 1; }
 
-/* ACTION BTNS */
-.action-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 2px 4px; opacity: 0.6; }
-.action-btn:hover { opacity: 1; }
+/* FY BAR */
+.progress-bar { height: 8px; background: #2e3250; border-radius: 4px; overflow: hidden; margin: 10px 0; }
+.progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2dd4bf, #4ade80); transition: width 0.4s; }
 
 /* MODAL */
 .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 100; display: none; align-items: center; justify-content: center; }
 .modal-bg.open { display: flex; }
-.modal { background: #1a1d27; border-radius: 18px; padding: 28px; width: 100%; max-width: 460px; border: 1px solid #2e3250; margin: 20px; max-height: 90vh; overflow-y: auto; }
+.modal { background: #1a1d27; border-radius: 18px; padding: 28px; width: 100%; max-width: 440px; border: 1px solid #2e3250; margin: 20px; max-height: 90vh; overflow-y: auto; }
 .modal-title { font-size: 17px; font-weight: 800; margin-bottom: 20px; }
-.modal-label { font-size: 11px; color: #8b8fa8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; }
-.modal-input, .modal-select { width: 100%; background: #0f1117; border: 1px solid #2e3250; border-radius: 8px; color: #f0f2ff; padding: 8px 12px; font-size: 14px; margin-bottom: 14px; font-family: inherit; outline: none; }
-.modal-input:focus, .modal-select:focus { border-color: #2dd4bf; }
-.modal-footer { display: flex; gap: 10px; margin-top: 8px; }
+.ml { font-size: 11px; color: #8b8fa8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; margin-top: 12px; }
+.ml:first-of-type { margin-top: 0; }
+.mi, .ms { width: 100%; background: #0f1117; border: 1px solid #2e3250; border-radius: 8px; color: #f0f2ff; padding: 9px 12px; font-size: 14px; font-family: inherit; outline: none; }
+.mi:focus, .ms:focus { border-color: #2dd4bf; }
+.mfooter { display: flex; gap: 10px; margin-top: 20px; }
 .btn-cancel { flex: 1; background: transparent; border: 1px solid #2e3250; color: #8b8fa8; border-radius: 10px; padding: 10px; cursor: pointer; font-family: inherit; }
-.btn-confirm { flex: 2; background: #2dd4bf; border: none; color: #0f1117; border-radius: 10px; padding: 10px; cursor: pointer; font-family: inherit; font-weight: 800; }
+.btn-ok { flex: 2; background: #2dd4bf; border: none; color: #0f1117; border-radius: 10px; padding: 10px; cursor: pointer; font-family: inherit; font-weight: 800; }
 
 /* SAVE BAR */
-.save-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1d27; border-top: 1px solid #2e3250; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
-.save-bar-text { font-size: 12px; color: #8b8fa8; }
-.autosave { font-size: 11px; color: #4ade80; margin-left: 8px; }
+.save-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1d27; border-top: 1px solid #2e3250; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 50; gap: 12px; flex-wrap: wrap; }
+.save-txt { font-size: 12px; color: #8b8fa8; }
+.autosave { font-size: 11px; color: #4ade80; margin-left: 6px; }
 .save-btns { display: flex; gap: 8px; }
 .save-btns button { background: #21253a; border: 1px solid #2e3250; color: #8b8fa8; border-radius: 8px; padding: 6px 14px; cursor: pointer; font-family: inherit; font-size: 12px; }
 .save-btns button:hover { border-color: #2dd4bf; color: #2dd4bf; }
+.empty { text-align: center; color: #8b8fa8; padding: 32px; font-size: 13px; }
 
-.empty-state { text-align: center; color: #8b8fa8; padding: 30px; font-size: 13px; }
-.progress-bar { height: 6px; background: #2e3250; border-radius: 3px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
-
-@media (max-width: 600px) {
-  .summary-grid { grid-template-columns: repeat(2, 1fr); }
-  .pipeline { grid-template-columns: repeat(2, 1fr); }
-  .pipe-stage:nth-child(2) { border-right: none; }
-  .pipe-stage:nth-child(3) { border-right: 1px solid #2e3250; border-top: 1px solid #2e3250; }
-  .pipe-stage:nth-child(4) { border-top: 1px solid #2e3250; }
-}
+/* CASE STATUS TOGGLE */
+.case-toggle { display: flex; gap: 6px; align-items: center; }
+.case-opt { padding: 4px 10px; border-radius: 6px; border: 1px solid #2e3250; font-size: 11px; font-weight: 700; cursor: pointer; background: transparent; font-family: inherit; color: #8b8fa8; }
+.case-opt.sel-yes { background: rgba(74,222,128,0.15); border-color: #4ade80; color: #4ade80; }
+.case-opt.sel-no  { background: rgba(255,77,109,0.15); border-color: #ff4d6d; color: #ff4d6d; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="header">
-    <div>
-      <div class="header-eyebrow">Driftwood Therapeutic Supports</div>
-      <div class="header-h1">Financial Tracker</div>
-      <div class="header-sub">Splose hours → Purchase order → Bank → Xero</div>
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-left">
+      <div class="eyebrow">Driftwood Therapeutic Supports</div>
+      <h1>Financial Tracker</h1>
+      <div class="sub">Weekly hours per client → fortnightly PO → Xero</div>
     </div>
-    <button class="btn-primary" onclick="openModal()">＋ Add Fortnight</button>
+    <div class="hdr-btns">
+      <button class="btn-secondary" onclick="openClientModal()">＋ Add Client</button>
+      <button class="btn-primary" onclick="openFortnightModal()">＋ Add Fortnight PO</button>
+    </div>
+  </div>
+
+  <!-- MISSING CASE ALERT -->
+  <div class="alert-banner" id="alert-banner">
+    <div class="alert-title">⚠️ Splose case not set up — action needed</div>
+    <div id="alert-items"></div>
   </div>
 
   <!-- SUMMARY -->
-  <div class="summary-grid" id="summary-grid"></div>
+  <div class="sum-grid" id="sum-grid"></div>
 
-  <!-- PIPELINE -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">💰 Income Pipeline</div>
-    </div>
-    <div class="pipeline" id="pipeline"></div>
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('weekly', this)">📅 Weekly Hours</button>
+    <button class="tab" onclick="switchTab('fortnights', this)">💰 Fortnight POs</button>
+    <button class="tab" onclick="switchTab('fy', this)">📈 FY Progress</button>
   </div>
 
-  <!-- FORTNIGHTS TABLE -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">📋 Fortnight Records</div>
-      <div style="display:flex;gap:8px;">
-        <select id="filter-status" class="btn-small" onchange="render()" style="cursor:pointer;">
-          <option value="all">All status</option>
-          <option value="logged">Hours logged</option>
-          <option value="po">PO received</option>
-          <option value="paid">Paid</option>
-          <option value="reconciled">Reconciled</option>
-        </select>
+  <!-- WEEKLY TAB -->
+  <div id="tab-weekly">
+    <div class="section">
+      <div class="sec-hdr">
+        <div class="sec-title">Hours by client — week ending Friday</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span id="week-total-hdr" style="font-size:13px;color:#2dd4bf;font-weight:700;"></span>
+        </div>
+      </div>
+      <div class="week-nav">
+        <button class="week-btn" onclick="changeWeek(-1)">‹</button>
+        <div class="week-label" id="week-label"></div>
+        <button class="week-btn" onclick="changeWeek(1)">›</button>
+      </div>
+      <div class="col-headers">
+        <div class="col-lbl" style="text-align:left;">Client</div>
+        <div class="col-lbl">Case set up?</div>
+        <div class="col-lbl">Rate/hr</div>
+        <div class="col-lbl">Hrs this week</div>
+        <div></div>
+      </div>
+      <div id="weekly-rows"></div>
+      <div class="week-summary-row">
+        <span class="week-sum-label">Week total</span>
+        <span class="week-sum-val" id="week-sum-val">0.0 hrs</span>
       </div>
     </div>
-    <div id="records-table"></div>
   </div>
 
-  <!-- ANNUAL TRACKER -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">📈 FY Progress</div>
+  <!-- FORTNIGHTS TAB -->
+  <div id="tab-fortnights" style="display:none;">
+    <div class="section">
+      <div class="sec-hdr">
+        <div class="sec-title">Fortnight purchase orders</div>
+      </div>
+      <div id="fortnights-table"></div>
     </div>
-    <div id="fy-progress"></div>
+  </div>
+
+  <!-- FY TAB -->
+  <div id="tab-fy" style="display:none;">
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-title">Financial year progress</div></div>
+      <div id="fy-content"></div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-title">Client summary — hours & value</div></div>
+      <div id="client-summary-table"></div>
+    </div>
   </div>
 
 </div>
 
 <!-- SAVE BAR -->
 <div class="save-bar">
-  <div class="save-bar-text">
-    Auto-saves to this browser
-    <span class="autosave" id="autosave"></span>
-  </div>
+  <div class="save-txt">Auto-saves to this browser<span class="autosave" id="autosave"></span></div>
   <div class="save-btns">
     <button onclick="document.getElementById('load-file').click()">⬆ Load backup</button>
     <input type="file" id="load-file" accept=".json" style="display:none" onchange="loadBackup(event)">
@@ -153,278 +219,462 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #0f1117; color
   </div>
 </div>
 
-<!-- ADD/EDIT MODAL -->
-<div class="modal-bg" id="modal" onclick="closeModal(event)">
+<!-- ADD CLIENT MODAL -->
+<div class="modal-bg" id="client-modal" onclick="closeMBg('client-modal',event)">
   <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-title" id="modal-title">➕ New Fortnight Record</div>
+    <div class="modal-title" id="client-modal-title">➕ Add Client</div>
+    <span class="ml">Client name</span>
+    <input class="mi" id="cm-name" placeholder="e.g. Marcus T.">
+    <span class="ml">NDIS number (optional)</span>
+    <input class="mi" id="cm-ndis" placeholder="XXX XXX XXXX">
+    <span class="ml">Your contracted rate ($/hr)</span>
+    <input class="mi" type="number" id="cm-rate" placeholder="e.g. 145.00" step="0.01" min="0" value="145">
+    <span class="ml">Splose case set up?</span>
+    <div class="case-toggle" style="margin-top:6px;">
+      <button class="case-opt sel-yes" id="cm-case-yes" onclick="setCaseOpt('yes')">✓ Yes</button>
+      <button class="case-opt" id="cm-case-no"  onclick="setCaseOpt('no')">✗ No — needs setup</button>
+      <button class="case-opt" id="cm-case-unk" onclick="setCaseOpt('unknown')">? Not sure</button>
+    </div>
+    <span class="ml">Notes</span>
+    <input class="mi" id="cm-notes" placeholder="Optional">
+    <div class="mfooter">
+      <button class="btn-cancel" onclick="document.getElementById('client-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-ok" onclick="saveClient()">Save Client</button>
+    </div>
+  </div>
+</div>
 
-    <label class="modal-label">Fortnight period</label>
-    <input class="modal-input" type="text" id="m-period" placeholder="e.g. 12–25 May 2026">
-
-    <label class="modal-label">Hours logged in Splose</label>
-    <input class="modal-input" type="number" id="m-hours" placeholder="e.g. 32.5" step="0.5" min="0">
-
-    <label class="modal-label">Your contracted rate ($/hr)</label>
-    <input class="modal-input" type="number" id="m-rate" placeholder="e.g. 145.00" step="0.01" min="0">
-
-    <label class="modal-label">Status</label>
-    <select class="modal-select" id="m-status">
-      <option value="logged">Hours logged in Splose</option>
-      <option value="po">Purchase order received</option>
-      <option value="paid">Payment received in bank</option>
+<!-- ADD FORTNIGHT MODAL -->
+<div class="modal-bg" id="fortnight-modal" onclick="closeMBg('fortnight-modal',event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="ft-modal-title">➕ New Fortnight PO</div>
+    <span class="ml">Fortnight period</span>
+    <input class="mi" id="ft-period" placeholder="e.g. 12–25 May 2026">
+    <span class="ml">Total hours (from your weekly logs)</span>
+    <input class="mi" type="number" id="ft-hours" placeholder="Auto-fills from weekly logs" step="0.5" min="0">
+    <span class="ml">PO amount ($)</span>
+    <input class="mi" type="number" id="ft-amount" placeholder="e.g. 4,060.00" step="0.01" min="0">
+    <span class="ml">PO number</span>
+    <input class="mi" id="ft-po" placeholder="e.g. PO-2026-043">
+    <span class="ml">Status</span>
+    <select class="ms" id="ft-status">
+      <option value="logged">Hours logged — awaiting PO</option>
+      <option value="po">PO received</option>
+      <option value="paid">Payment received</option>
       <option value="reconciled">Reconciled in Xero</option>
     </select>
-
-    <label class="modal-label">PO number (when received)</label>
-    <input class="modal-input" type="text" id="m-po" placeholder="e.g. PO-2026-043">
-
-    <label class="modal-label">Date paid (when applicable)</label>
-    <input class="modal-input" type="date" id="m-date-paid">
-
-    <label class="modal-label">Notes</label>
-    <input class="modal-input" type="text" id="m-notes" placeholder="Optional">
-
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="document.getElementById('modal').classList.remove('open')">Cancel</button>
-      <button class="btn-confirm" onclick="saveRecord()">Save Record</button>
+    <span class="ml">Date paid</span>
+    <input class="mi" type="date" id="ft-datepaid">
+    <span class="ml">Notes</span>
+    <input class="mi" id="ft-notes" placeholder="Optional">
+    <div class="mfooter">
+      <button class="btn-cancel" onclick="document.getElementById('fortnight-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-ok" onclick="saveFortnight()">Save</button>
     </div>
   </div>
 </div>
 
 <script>
-var records = [];
-var editId = null;
-var RATE_DEFAULT = 145;
+// ── STATE ─────────────────────────────────────────────
+var clients = [];       // { id, name, ndis, rate, caseSetUp, notes }
+var weeklyHours = {};   // { "weekKey": { "clientId": hours } }
+var fortnights = [];    // { id, period, hours, amount, po, status, datePaid, notes }
+var currentWeekOffset = 0;
+var editClientId = null;
+var editFortnightId = null;
+var clientCaseOpt = 'yes';
+var activeTab = 'weekly';
 
 var STATUS_CFG = {
-  logged:     { label: 'Hours logged',   pill: 'pill-logged',     color: '#60b4ff', next: 'po' },
-  po:         { label: 'PO received',    pill: 'pill-po',         color: '#ffb347', next: 'paid' },
-  paid:       { label: 'Paid',           pill: 'pill-paid',       color: '#4ade80', next: 'reconciled' },
-  reconciled: { label: 'Reconciled',     pill: 'pill-reconciled', color: '#2dd4bf', next: null },
+  logged:     { label:'Awaiting PO',  color:'#60b4ff' },
+  po:         { label:'PO received',  color:'#ffb347' },
+  paid:       { label:'Paid',         color:'#4ade80' },
+  reconciled: { label:'In Xero',      color:'#2dd4bf' },
 };
 
-function fmt(n) { return '$' + Number(n||0).toLocaleString('en-AU', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+// ── WEEK UTILS ────────────────────────────────────────
+function getMondayOf(offset) {
+  var d = new Date();
+  var day = d.getDay(); // 0=Sun
+  var diff = (day === 0) ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff + (offset * 7));
+  d.setHours(0,0,0,0);
+  return d;
+}
+function weekKey(offset) {
+  var m = getMondayOf(offset);
+  return m.toISOString().slice(0,10);
+}
+function weekLabel(offset) {
+  var mon = getMondayOf(offset);
+  var fri = new Date(mon); fri.setDate(fri.getDate() + 4);
+  var fmt = function(d) { return d.getDate() + ' ' + d.toLocaleString('en-AU',{month:'short'}); };
+  var suffix = offset === 0 ? ' (this week)' : offset === -1 ? ' (last week)' : '';
+  return 'Week: ' + fmt(mon) + ' – ' + fmt(fri) + ' ' + fri.getFullYear() + suffix;
+}
+function getWeekHrs(clientId, offset) {
+  var k = weekKey(offset);
+  return (weeklyHours[k] && weeklyHours[k][clientId]) ? weeklyHours[k][clientId] : 0;
+}
+function setWeekHrs(clientId, offset, val) {
+  var k = weekKey(offset);
+  if (!weeklyHours[k]) weeklyHours[k] = {};
+  weeklyHours[k][clientId] = val;
+}
 
 // ── STORAGE ───────────────────────────────────────────
-function save() {
-  localStorage.setItem('driftwood_finance', JSON.stringify(records));
+function persist() {
+  localStorage.setItem('dw_fin_v2', JSON.stringify({ clients:clients, weeklyHours:weeklyHours, fortnights:fortnights }));
   var el = document.getElementById('autosave');
-  el.textContent = '✓ Saved';
-  setTimeout(function() { el.textContent = ''; }, 2000);
+  el.textContent = ' ✓ Saved';
+  setTimeout(function(){ el.textContent=''; }, 2000);
 }
-function load() {
+function hydrate() {
   try {
-    var raw = localStorage.getItem('driftwood_finance');
-    if (raw) records = JSON.parse(raw);
-  } catch(e) {}
-  if (!records || records.length === 0) records = defaultRecords();
+    var raw = localStorage.getItem('dw_fin_v2');
+    if (raw) {
+      var d = JSON.parse(raw);
+      clients = d.clients || [];
+      weeklyHours = d.weeklyHours || {};
+      fortnights = d.fortnights || [];
+    }
+  } catch(e){}
+  if (clients.length === 0) seedDefaults();
 }
-function defaultRecords() {
-  return [
-    { id:1, period:'28 Apr – 11 May 2026', hours:34, rate:145, status:'reconciled', po:'PO-2026-031', datePaid:'2026-05-09', notes:'' },
-    { id:2, period:'12–25 May 2026',        hours:28, rate:145, status:'po',         po:'PO-2026-038', datePaid:'', notes:'' },
-    { id:3, period:'26 May – 8 Jun 2026',   hours:0,  rate:145, status:'logged',     po:'', datePaid:'', notes:'In progress' },
+function seedDefaults() {
+  clients = [
+    { id:1, name:'Marcus T.',  ndis:'', rate:145, caseSetUp:'yes',     notes:'' },
+    { id:2, name:'Priya S.',   ndis:'', rate:145, caseSetUp:'no',      notes:'Chase admin to set up case' },
+    { id:3, name:'Liam O.',    ndis:'', rate:145, caseSetUp:'yes',     notes:'' },
+    { id:4, name:'Danielle W.',ndis:'', rate:145, caseSetUp:'unknown', notes:'' },
+  ];
+  var k = weekKey(0);
+  weeklyHours[k] = { 1:3.5, 2:2.0, 3:4.0, 4:0 };
+  fortnights = [
+    { id:1, period:'28 Apr – 11 May 2026', hours:34, amount:4930, po:'PO-2026-031', status:'reconciled', datePaid:'2026-05-09', notes:'' },
+    { id:2, period:'12–25 May 2026',        hours:28, amount:4060, po:'PO-2026-038', status:'po',         datePaid:'',           notes:'' },
   ];
 }
 function saveBackup() {
-  var blob = new Blob([JSON.stringify({ version:'1.0', records: records }, null, 2)], { type:'application/json' });
+  var blob = new Blob([JSON.stringify({version:'2.0',clients:clients,weeklyHours:weeklyHours,fortnights:fortnights},null,2)],{type:'application/json'});
   var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = 'driftwood_finance_backup_' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
+  var a = document.createElement('a'); a.href=url;
+  a.download='driftwood_finance_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); URL.revokeObjectURL(url);
 }
 function loadBackup(e) {
-  var file = e.target.files[0]; if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev) {
+  var f = e.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(ev) {
     try {
-      var data = JSON.parse(ev.target.result);
-      if (data.records) { records = data.records; save(); render(); }
-    } catch(err) { alert('Could not read backup file.'); }
+      var d = JSON.parse(ev.target.result);
+      if (d.clients) clients = d.clients;
+      if (d.weeklyHours) weeklyHours = d.weeklyHours;
+      if (d.fortnights) fortnights = d.fortnights;
+      persist(); renderAll();
+    } catch(err){ alert('Could not read backup.'); }
   };
-  reader.readAsText(file);
-  e.target.value = '';
+  r.readAsText(f); e.target.value='';
 }
 
-// ── MODAL ─────────────────────────────────────────────
-function openModal(id) {
-  editId = id || null;
-  var r = id ? records.find(function(x){return x.id===id;}) : null;
-  document.getElementById('modal-title').textContent = id ? '✏️ Edit Record' : '➕ New Fortnight Record';
-  document.getElementById('m-period').value   = r ? r.period : '';
-  document.getElementById('m-hours').value    = r ? r.hours : '';
-  document.getElementById('m-rate').value     = r ? r.rate : RATE_DEFAULT;
-  document.getElementById('m-status').value   = r ? r.status : 'logged';
-  document.getElementById('m-po').value       = r ? r.po : '';
-  document.getElementById('m-date-paid').value= r ? r.datePaid : '';
-  document.getElementById('m-notes').value    = r ? r.notes : '';
-  document.getElementById('modal').classList.add('open');
+// ── TABS ─────────────────────────────────────────────
+function switchTab(name, btn) {
+  activeTab = name;
+  document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('tab-weekly').style.display     = name==='weekly'     ? '' : 'none';
+  document.getElementById('tab-fortnights').style.display = name==='fortnights' ? '' : 'none';
+  document.getElementById('tab-fy').style.display         = name==='fy'         ? '' : 'none';
+  renderAll();
 }
-function closeModal(e) { if (e.target === document.getElementById('modal')) document.getElementById('modal').classList.remove('open'); }
+function changeWeek(dir) { currentWeekOffset += dir; renderWeekly(); }
 
-function saveRecord() {
-  var period = document.getElementById('m-period').value.trim();
-  var hours  = parseFloat(document.getElementById('m-hours').value) || 0;
-  var rate   = parseFloat(document.getElementById('m-rate').value) || RATE_DEFAULT;
-  if (!period) { alert('Please enter a period.'); return; }
+// ── MODALS ─────────────────────────────────────────────
+function closeMBg(id, e) { if(e.target===document.getElementById(id)) document.getElementById(id).classList.remove('open'); }
 
-  var rec = {
-    id: editId || Date.now(),
-    period: period,
-    hours: hours,
-    rate: rate,
-    status: document.getElementById('m-status').value,
-    po: document.getElementById('m-po').value.trim(),
-    datePaid: document.getElementById('m-date-paid').value,
-    notes: document.getElementById('m-notes').value.trim(),
-  };
-
-  if (editId) {
-    records = records.map(function(r){ return r.id === editId ? rec : r; });
-  } else {
-    records.push(rec);
-  }
-
-  document.getElementById('modal').classList.remove('open');
-  save();
-  render();
-}
-
-function advanceStatus(id) {
-  records = records.map(function(r) {
-    if (r.id !== id) return r;
-    var next = STATUS_CFG[r.status] && STATUS_CFG[r.status].next;
-    return next ? Object.assign({}, r, { status: next }) : r;
+function setCaseOpt(v) {
+  clientCaseOpt = v;
+  ['yes','no','unk'].forEach(function(k){
+    document.getElementById('cm-case-'+k).className = 'case-opt' + (v===k||(v==='unknown'&&k==='unk')?' sel-'+(v==='yes'?'yes':'no'):'');
   });
-  save(); render();
+  document.getElementById('cm-case-yes').className = 'case-opt' + (v==='yes'?' sel-yes':'');
+  document.getElementById('cm-case-no').className  = 'case-opt' + (v==='no'?' sel-no':'');
+  document.getElementById('cm-case-unk').className = 'case-opt' + (v==='unknown'?' sel-no':'');
 }
 
-function deleteRecord(id) {
+function openClientModal(id) {
+  editClientId = id||null;
+  var c = id ? clients.find(function(x){return x.id===id;}) : null;
+  document.getElementById('client-modal-title').textContent = id ? '✏️ Edit Client' : '➕ Add Client';
+  document.getElementById('cm-name').value  = c ? c.name  : '';
+  document.getElementById('cm-ndis').value  = c ? c.ndis  : '';
+  document.getElementById('cm-rate').value  = c ? c.rate  : 145;
+  document.getElementById('cm-notes').value = c ? c.notes : '';
+  setCaseOpt(c ? c.caseSetUp : 'yes');
+  document.getElementById('client-modal').classList.add('open');
+}
+
+function saveClient() {
+  var name = document.getElementById('cm-name').value.trim();
+  if (!name) { alert('Please enter a client name.'); return; }
+  var rec = {
+    id: editClientId || Date.now(),
+    name: name,
+    ndis: document.getElementById('cm-ndis').value.trim(),
+    rate: parseFloat(document.getElementById('cm-rate').value)||145,
+    caseSetUp: clientCaseOpt,
+    notes: document.getElementById('cm-notes').value.trim(),
+  };
+  if (editClientId) {
+    clients = clients.map(function(c){ return c.id===editClientId ? rec : c; });
+  } else {
+    clients.push(rec);
+  }
+  document.getElementById('client-modal').classList.remove('open');
+  persist(); renderAll();
+}
+
+function deleteClient(id) {
+  if (!confirm('Remove this client? Their weekly hours will also be removed.')) return;
+  clients = clients.filter(function(c){ return c.id!==id; });
+  Object.keys(weeklyHours).forEach(function(k){ if(weeklyHours[k]) delete weeklyHours[k][id]; });
+  persist(); renderAll();
+}
+
+function openFortnightModal(id) {
+  editFortnightId = id||null;
+  var f = id ? fortnights.find(function(x){return x.id===id;}) : null;
+  document.getElementById('ft-modal-title').textContent = id ? '✏️ Edit Fortnight' : '➕ New Fortnight PO';
+  document.getElementById('ft-period').value   = f ? f.period   : '';
+  document.getElementById('ft-hours').value    = f ? f.hours    : weeklyTotal(currentWeekOffset).toFixed(1);
+  document.getElementById('ft-amount').value   = f ? f.amount   : '';
+  document.getElementById('ft-po').value       = f ? f.po       : '';
+  document.getElementById('ft-status').value   = f ? f.status   : 'logged';
+  document.getElementById('ft-datepaid').value = f ? f.datePaid : '';
+  document.getElementById('ft-notes').value    = f ? f.notes    : '';
+  document.getElementById('fortnight-modal').classList.add('open');
+}
+
+function saveFortnight() {
+  var period = document.getElementById('ft-period').value.trim();
+  if (!period) { alert('Please enter a period.'); return; }
+  var rec = {
+    id: editFortnightId || Date.now(),
+    period: period,
+    hours: parseFloat(document.getElementById('ft-hours').value)||0,
+    amount: parseFloat(document.getElementById('ft-amount').value)||0,
+    po: document.getElementById('ft-po').value.trim(),
+    status: document.getElementById('ft-status').value,
+    datePaid: document.getElementById('ft-datepaid').value,
+    notes: document.getElementById('ft-notes').value.trim(),
+  };
+  if (editFortnightId) {
+    fortnights = fortnights.map(function(f){ return f.id===editFortnightId ? rec : f; });
+  } else {
+    fortnights.push(rec);
+  }
+  document.getElementById('fortnight-modal').classList.remove('open');
+  persist(); renderAll();
+}
+
+function advanceFortnight(id) {
+  var order = ['logged','po','paid','reconciled'];
+  fortnights = fortnights.map(function(f){
+    if (f.id!==id) return f;
+    var idx = order.indexOf(f.status);
+    return Object.assign({},f,{status: idx<order.length-1 ? order[idx+1] : f.status});
+  });
+  persist(); renderAll();
+}
+function deleteFortnight(id) {
   if (!confirm('Delete this record?')) return;
-  records = records.filter(function(r){ return r.id !== id; });
-  save(); render();
+  fortnights = fortnights.filter(function(f){ return f.id!==id; });
+  persist(); renderAll();
 }
 
 // ── RENDER ────────────────────────────────────────────
-function render() {
+function renderAll() {
+  renderAlert();
   renderSummary();
-  renderPipeline();
-  renderTable();
-  renderFY();
+  if (activeTab==='weekly')     renderWeekly();
+  if (activeTab==='fortnights') renderFortnights();
+  if (activeTab==='fy')         renderFY();
+}
+
+function renderAlert() {
+  var missing = clients.filter(function(c){ return c.caseSetUp==='no'; });
+  var unknown = clients.filter(function(c){ return c.caseSetUp==='unknown'; });
+  var banner = document.getElementById('alert-banner');
+  var items  = document.getElementById('alert-items');
+  if (missing.length===0 && unknown.length===0) { banner.classList.remove('show'); return; }
+  banner.classList.add('show');
+  var html='';
+  missing.forEach(function(c){
+    html+='<div class="alert-item">🔴 <strong>'+c.name+'</strong> — case not set up in Splose. Hours cannot be logged until this is fixed.'+
+          (c.notes?' ('+c.notes+')':'')+'</div>';
+  });
+  unknown.forEach(function(c){
+    html+='<div class="alert-item" style="color:#ffb347aa;">🟡 <strong>'+c.name+'</strong> — case status unknown. Confirm with the admin before logging hours.</div>';
+  });
+  items.innerHTML=html;
+}
+
+function fmt(n){ return '$'+Number(n||0).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+function weeklyTotal(offset) {
+  return clients.reduce(function(a,c){ return a+getWeekHrs(c.id,offset); },0);
 }
 
 function renderSummary() {
-  var paid = records.filter(function(r){ return r.status==='paid'||r.status==='reconciled'; });
-  var paidAmt = paid.reduce(function(a,r){ return a + r.hours*r.rate; }, 0);
-  var pending = records.filter(function(r){ return r.status==='logged'||r.status==='po'; });
-  var pendingAmt = pending.reduce(function(a,r){ return a + r.hours*r.rate; }, 0);
-  var unreconciled = records.filter(function(r){ return r.status==='paid'; });
-  var unreconciledAmt = unreconciled.reduce(function(a,r){ return a + r.hours*r.rate; }, 0);
-  var totalHrs = records.reduce(function(a,r){ return a + (r.hours||0); }, 0);
-
+  var paidAmt = fortnights.filter(function(f){ return f.status==='paid'||f.status==='reconciled'; })
+                           .reduce(function(a,f){ return a+f.amount; },0);
+  var pendingAmt = fortnights.filter(function(f){ return f.status==='logged'||f.status==='po'; })
+                              .reduce(function(a,f){ return a+f.amount; },0);
+  var needXero = fortnights.filter(function(f){ return f.status==='paid'; })
+                             .reduce(function(a,f){ return a+f.amount; },0);
+  var thisWeekHrs = weeklyTotal(0);
   var cards = [
-    { label: 'Income received', num: fmt(paidAmt), color: '#4ade80' },
-    { label: 'Awaiting payment', num: fmt(pendingAmt), color: '#ffb347' },
-    { label: 'Not yet in Xero', num: fmt(unreconciledAmt), color: '#ff4d6d' },
-    { label: 'Total hours logged', num: totalHrs.toFixed(1) + 'h', color: '#60b4ff' },
+    { label:'Received this FY', num:fmt(paidAmt),    color:'#4ade80' },
+    { label:'Awaiting payment',  num:fmt(pendingAmt), color:'#ffb347' },
+    { label:'Not yet in Xero',   num:fmt(needXero),   color:'#ff4d6d' },
+    { label:'Hours this week',   num:thisWeekHrs.toFixed(1)+'h', color:'#2dd4bf' },
   ];
-  document.getElementById('summary-grid').innerHTML = cards.map(function(c) {
-    return '<div class="sum-card"><div class="sum-num" style="color:' + c.color + ';">' + c.num + '</div><div class="sum-lbl">' + c.label + '</div></div>';
+  document.getElementById('sum-grid').innerHTML = cards.map(function(c){
+    return '<div class="sum-card"><div class="sum-num" style="color:'+c.color+';">'+c.num+'</div><div class="sum-lbl">'+c.label+'</div></div>';
   }).join('');
 }
 
-function renderPipeline() {
-  var stages = ['logged','po','paid','reconciled'];
-  var labels = ['Hours logged', 'PO received', 'Paid to bank', 'In Xero'];
-  var colors = ['#60b4ff','#ffb347','#4ade80','#2dd4bf'];
-  var html = '';
-  stages.forEach(function(s, i) {
-    var recs = records.filter(function(r){ return r.status===s; });
-    var amt = recs.reduce(function(a,r){ return a + r.hours*r.rate; }, 0);
-    html += '<div class="pipe-stage">';
-    html += '<div class="pipe-label">' + labels[i] + '</div>';
-    html += '<div class="pipe-amount" style="color:' + colors[i] + ';">' + fmt(amt) + '</div>';
-    html += '<div class="pipe-count">' + recs.length + ' fortnight' + (recs.length!==1?'s':'') + '</div>';
-    html += '<div class="pipe-bar" style="background:' + colors[i] + '33;"><div style="height:3px;border-radius:2px;background:' + colors[i] + ';width:' + (amt>0?'100':'0') + '%;"></div></div>';
-    html += '</div>';
-  });
-  document.getElementById('pipeline').innerHTML = html;
-}
+function renderWeekly() {
+  document.getElementById('week-label').textContent = weekLabel(currentWeekOffset);
+  var wkHrs = weeklyTotal(currentWeekOffset);
+  document.getElementById('week-total-hdr').textContent = wkHrs.toFixed(1)+' hrs';
+  document.getElementById('week-sum-val').textContent   = wkHrs.toFixed(1)+' hrs';
 
-function renderTable() {
-  var filterStatus = document.getElementById('filter-status').value;
-  var filtered = records.filter(function(r){ return filterStatus==='all' || r.status===filterStatus; });
-
-  if (filtered.length === 0) {
-    document.getElementById('records-table').innerHTML = '<div class="empty-state">No records yet. Click + Add Fortnight to get started.</div>';
+  if (clients.length===0) {
+    document.getElementById('weekly-rows').innerHTML='<div class="empty">No clients yet. Click + Add Client to get started.</div>';
     return;
   }
 
-  var html = '<table class="data-table"><thead><tr>';
-  html += '<th>Period</th><th>Hours</th><th>Amount</th><th>PO</th><th>Status</th><th>Date paid</th><th>Actions</th>';
-  html += '</tr></thead><tbody>';
-
-  filtered.forEach(function(r) {
-    var cfg = STATUS_CFG[r.status] || STATUS_CFG.logged;
-    var amt = r.hours * r.rate;
-    var nextLabel = cfg.next ? 'Mark as ' + STATUS_CFG[cfg.next].label : '';
-    html += '<tr>';
-    html += '<td style="font-weight:600;">' + r.period + (r.notes ? '<div style="font-size:11px;color:#8b8fa8;margin-top:2px;">' + r.notes + '</div>' : '') + '</td>';
-    html += '<td>' + (r.hours||0).toFixed(1) + 'h</td>';
-    html += '<td style="font-weight:700;color:#f0f2ff;">' + fmt(amt) + '</td>';
-    html += '<td style="font-size:12px;color:#8b8fa8;">' + (r.po || '—') + '</td>';
-    html += '<td><span class="pill ' + cfg.pill + '">' + cfg.label + '</span></td>';
-    html += '<td style="font-size:12px;color:#8b8fa8;">' + (r.datePaid || '—') + '</td>';
-    html += '<td style="white-space:nowrap;">';
-    if (cfg.next) html += '<button class="action-btn" title="' + nextLabel + '" onclick="advanceStatus(' + r.id + ')">✅</button>';
-    html += '<button class="action-btn" title="Edit" onclick="openModal(' + r.id + ')">✏️</button>';
-    html += '<button class="action-btn" title="Delete" onclick="deleteRecord(' + r.id + ')">🗑</button>';
-    html += '</td></tr>';
+  var html='';
+  clients.forEach(function(c){
+    var hrs  = getWeekHrs(c.id, currentWeekOffset);
+    var val  = (hrs*c.rate).toFixed(2);
+    var dotCls = c.caseSetUp==='yes'?'case-ok':c.caseSetUp==='no'?'case-missing':'case-unknown';
+    var caseHint = c.caseSetUp==='no'
+      ? '<div class="no-case-warning">⚠ No case in Splose</div>'
+      : c.caseSetUp==='unknown'
+        ? '<div style="font-size:10px;color:#ffb347;font-weight:700;">? Confirm case</div>'
+        : '';
+    html+='<div class="client-row">';
+    html+='<div class="client-name-cell"><div class="case-dot '+dotCls+'"></div>';
+    html+='<div><div class="client-name">'+c.name+'</div>'+caseHint+'</div></div>';
+    html+='<div style="text-align:right;">';
+    if(c.caseSetUp==='yes'){
+      html+='<span style="font-size:12px;color:#4ade80;font-weight:700;">✓ Case ok</span>';
+    } else if(c.caseSetUp==='no'){
+      html+='<button class="btn-sm" style="font-size:11px;border-color:#ff4d6d;color:#ff4d6d;" onclick="openClientModal('+c.id+')">Fix now</button>';
+    } else {
+      html+='<button class="btn-sm" style="font-size:11px;border-color:#ffb347;color:#ffb347;" onclick="openClientModal('+c.id+')">Confirm</button>';
+    }
+    html+='</div>';
+    html+='<div class="hrs-display" style="text-align:right;color:#8b8fa8;font-size:13px;">'+fmt(c.rate)+'/hr</div>';
+    html+='<input class="hrs-input" type="number" min="0" step="0.5" value="'+(hrs||'')+'" placeholder="0"';
+    html+=(c.caseSetUp==='no'?' disabled title="Set up Splose case first" style="opacity:0.4;cursor:not-allowed;"':'');
+    html+=' onchange="updateHrs('+c.id+','+currentWeekOffset+',this.value)">';
+    html+='<button class="row-del" onclick="openClientModal('+c.id+')" title="Edit client">✏️</button>';
+    html+='</div>';
   });
+  document.getElementById('weekly-rows').innerHTML=html;
+}
 
-  html += '</tbody></table>';
-  document.getElementById('records-table').innerHTML = html;
+function updateHrs(clientId, offset, val) {
+  setWeekHrs(clientId, offset, parseFloat(val)||0);
+  var wkHrs = weeklyTotal(offset);
+  document.getElementById('week-total-hdr').textContent = wkHrs.toFixed(1)+' hrs';
+  document.getElementById('week-sum-val').textContent   = wkHrs.toFixed(1)+' hrs';
+  renderSummary();
+  persist();
+}
+
+function renderFortnights() {
+  if (fortnights.length===0) {
+    document.getElementById('fortnights-table').innerHTML='<div class="empty">No fortnights recorded yet.</div>';
+    return;
+  }
+  var html='<table class="data-table"><thead><tr>';
+  html+='<th>Period</th><th>Hours</th><th>PO Amount</th><th>PO #</th><th>Status</th><th>Paid</th><th>Actions</th>';
+  html+='</tr></thead><tbody>';
+  fortnights.forEach(function(f){
+    var cfg = STATUS_CFG[f.status]||STATUS_CFG.logged;
+    html+='<tr>';
+    html+='<td style="font-weight:600;">'+f.period+(f.notes?'<div style="font-size:11px;color:#8b8fa8;margin-top:2px;">'+f.notes+'</div>':'')+'</td>';
+    html+='<td>'+(f.hours||0).toFixed(1)+'h</td>';
+    html+='<td style="font-weight:700;">'+fmt(f.amount)+'</td>';
+    html+='<td style="font-size:12px;color:#8b8fa8;">'+(f.po||'—')+'</td>';
+    html+='<td><span class="pill" style="background:'+cfg.color+'22;color:'+cfg.color+';border:1px solid '+cfg.color+'55;">'+cfg.label+'</span></td>';
+    html+='<td style="font-size:12px;color:#8b8fa8;">'+(f.datePaid||'—')+'</td>';
+    html+='<td style="white-space:nowrap;">';
+    if(f.status!=='reconciled') html+='<button class="act-btn" title="Advance status" onclick="advanceFortnight('+f.id+')">✅</button>';
+    html+='<button class="act-btn" title="Edit" onclick="openFortnightModal('+f.id+')">✏️</button>';
+    html+='<button class="act-btn" title="Delete" onclick="deleteFortnight('+f.id+')">🗑</button>';
+    html+='</td></tr>';
+  });
+  html+='</tbody></table>';
+  document.getElementById('fortnights-table').innerHTML=html;
 }
 
 function renderFY() {
   var FY_TARGET = 80000;
   var now = new Date();
-  var fyStart = now.getMonth() >= 6 ? new Date(now.getFullYear(), 6, 1) : new Date(now.getFullYear()-1, 6, 1);
-  var fyEnd = new Date(fyStart.getFullYear()+1, 5, 30);
-  var daysTotal = (fyEnd - fyStart) / 86400000;
-  var daysGone  = Math.min((now - fyStart) / 86400000, daysTotal);
+  var fyStart = now.getMonth()>=6 ? new Date(now.getFullYear(),6,1) : new Date(now.getFullYear()-1,6,1);
+  var fyEnd   = new Date(fyStart.getFullYear()+1,5,30);
+  var daysTotal = (fyEnd-fyStart)/86400000;
+  var daysGone  = Math.min((now-fyStart)/86400000,daysTotal);
+  var ytd = fortnights.filter(function(f){return f.status==='paid'||f.status==='reconciled';})
+                       .reduce(function(a,f){return a+f.amount;},0);
+  var pct = Math.min(ytd/FY_TARGET*100,100);
+  var timePct = daysGone/daysTotal*100;
+  var onTrack = ytd >= FY_TARGET*timePct/100;
+  var fy = 'FY'+fyStart.getFullYear().toString().slice(2)+'/'+fyEnd.getFullYear().toString().slice(2);
 
-  var ytdIncome = records
-    .filter(function(r){ return r.status==='paid'||r.status==='reconciled'; })
-    .reduce(function(a,r){ return a + r.hours*r.rate; }, 0);
+  var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
+  html+='<div style="font-size:14px;">'+fy+' income vs target ('+fmt(FY_TARGET)+')</div>';
+  html+='<div style="font-weight:700;color:'+(onTrack?'#4ade80':'#ffb347')+'">'+(onTrack?'✓ On track':'⚠ Behind pace')+'</div>';
+  html+='</div>';
+  html+='<div class="progress-bar"><div class="progress-fill" style="width:'+pct.toFixed(1)+'%;"></div></div>';
+  html+='<div style="display:flex;justify-content:space-between;font-size:12px;color:#8b8fa8;margin-top:6px;">';
+  html+='<span>Received: <strong style="color:#f0f2ff;">'+fmt(ytd)+'</strong></span>';
+  html+='<span>'+pct.toFixed(0)+'% of target</span>';
+  html+='<span>Remaining: <strong style="color:#f0f2ff;">'+fmt(Math.max(0,FY_TARGET-ytd))+'</strong></span>';
+  html+='</div>';
+  html+='<div style="margin-top:10px;font-size:11px;color:#4a4f6a;">Target is a guide — update to match your income plan. Excludes expenses and tax set-aside.</div>';
+  document.getElementById('fy-content').innerHTML=html;
 
-  var ytdPct = Math.min(ytdIncome / FY_TARGET * 100, 100);
-  var timePct = daysGone / daysTotal * 100;
-  var onTrack = ytdIncome >= (FY_TARGET * timePct / 100);
-
-  var fyLabel = 'FY' + fyStart.getFullYear().toString().slice(2) + '/' + fyEnd.getFullYear().toString().slice(2);
-
-  var html = '<div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">';
-  html += '<div style="font-size:13px;">' + fyLabel + ' income vs target (' + fmt(FY_TARGET) + ')</div>';
-  html += '<div style="font-size:13px;font-weight:700;color:' + (onTrack?'#4ade80':'#ffb347') + ';">' + (onTrack ? '✓ On track' : '⚠ Behind pace') + '</div>';
-  html += '</div>';
-  html += '<div class="progress-bar" style="margin-bottom:8px;">';
-  html += '<div class="progress-fill" style="width:' + ytdPct.toFixed(1) + '%;background:linear-gradient(90deg,#2dd4bf,#4ade80);"></div>';
-  html += '</div>';
-  html += '<div style="display:flex;justify-content:space-between;font-size:12px;color:#8b8fa8;">';
-  html += '<span>Received: <strong style="color:#f0f2ff;">' + fmt(ytdIncome) + '</strong></span>';
-  html += '<span>' + ytdPct.toFixed(0) + '% of target</span>';
-  html += '<span>Remaining: <strong style="color:#f0f2ff;">' + fmt(Math.max(0,FY_TARGET-ytdIncome)) + '</strong></span>';
-  html += '</div>';
-  html += '<div style="margin-top:12px;font-size:11px;color:#8b8fa8;">Target is a guide only — update it to match your actual income plan. Does not include business expenses or tax set-aside.</div>';
-
-  document.getElementById('fy-progress').innerHTML = html;
+  // Client summary
+  var allWeekKeys = Object.keys(weeklyHours);
+  var ch='<table class="data-table"><thead><tr><th>Client</th><th>Case</th><th>Total hrs logged</th><th>Est. value</th><th>Rate</th><th></th></tr></thead><tbody>';
+  clients.forEach(function(c){
+    var totalHrs = allWeekKeys.reduce(function(a,k){ return a+(weeklyHours[k]&&weeklyHours[k][c.id]?weeklyHours[k][c.id]:0); },0);
+    var dotCls = c.caseSetUp==='yes'?'case-ok':c.caseSetUp==='no'?'case-missing':'case-unknown';
+    var caseLabel = c.caseSetUp==='yes'?'<span style="color:#4ade80;font-size:12px;">✓ Set up</span>':
+                    c.caseSetUp==='no' ?'<span style="color:#ff4d6d;font-size:12px;font-weight:700;">⚠ Missing</span>':
+                                        '<span style="color:#ffb347;font-size:12px;">? Unknown</span>';
+    ch+='<tr>';
+    ch+='<td style="font-weight:600;"><span class="case-dot '+dotCls+'" style="display:inline-block;margin-right:6px;"></span>'+c.name+'</td>';
+    ch+='<td>'+caseLabel+'</td>';
+    ch+='<td>'+totalHrs.toFixed(1)+' hrs</td>';
+    ch+='<td style="font-weight:700;color:#2dd4bf;">'+fmt(totalHrs*c.rate)+'</td>';
+    ch+='<td style="color:#8b8fa8;">'+fmt(c.rate)+'/hr</td>';
+    ch+='<td><button class="act-btn" onclick="openClientModal('+c.id+')">✏️</button><button class="act-btn" onclick="deleteClient('+c.id+')">🗑</button></td>';
+    ch+='</tr>';
+  });
+  ch+='</tbody></table>';
+  document.getElementById('client-summary-table').innerHTML=ch;
 }
 
-load();
-render();
+// ── INIT ──────────────────────────────────────────────
+hydrate();
+renderAll();
 </script>
 </body>
 </html>
